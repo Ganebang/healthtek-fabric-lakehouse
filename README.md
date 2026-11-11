@@ -63,6 +63,7 @@ flowchart LR
 | Warehouse | `wh_health_analytics` | Copie T-SQL des tables Gold pour les usages SQL |
 | Semantic model | `sem_health_analytics` | Modèle Direct Lake, 79 mesures DAX |
 | Report | `rpt_healthtek_executive` | Rapport de pilotage, 5 pages |
+| Eventhouse / KQL | `eh_health_analytics` | Brique temps réel : bases KQL, requêtes et tableau de bord |
 
 ---
 
@@ -170,21 +171,27 @@ Le modèle `sem_health_analytics` lit directement les tables Delta en mode **Dir
 ## Organisation du dépôt
 
 ```text
-fabric/                          Items Microsoft Fabric (format Git integration)
+fabric/                                   Items Microsoft Fabric synchronisés par l'intégration Git
+├── data_platform/
+│   ├── lh_health_analytics.Lakehouse
+│   └── env_health_analytics.Environment
+├── utilities/                            nb_util_config, nb_util_io, nb_util_logging, nb_util_validation
 ├── notebooks/
-│   ├── utilities/               nb_util_config, nb_util_io, nb_util_logging, nb_util_validation
-│   ├── bronze/                  nb_bronze_ingest_bdpm, nb_bronze_load_bdpm
-│   ├── silver/                  nb_silver_clean_bdpm
-│   ├── gold/                    nb_gold_build_galaxy
-│   ├── quality/                 nb_dq_validate_layer
-│   ├── warehouse/               nb_warehouse_sync_gold
-│   └── ops/                     nb_ops_setup_folders, nb_ops_run_guard,
-│                                nb_ops_maintenance_delta, nb_ops_refresh_semantic_model
-├── pl_master_health_pipeline.DataPipeline/
-├── sem_health_analytics.SemanticModel/
-└── rpt_healthtek_executive.Report/
+│   ├── bronze/                           nb_bronze_ingest_bdpm, nb_bronze_load_bdpm
+│   ├── silver/                           nb_silver_clean_bdpm
+│   ├── gold/                             nb_gold_build_galaxy
+│   ├── quality/                          nb_dq_validate_layer
+│   ├── warehouse/                        nb_warehouse_sync_gold
+│   └── ops/                              nb_ops_setup_folders, nb_ops_run_guard,
+│                                         nb_ops_maintenance_delta, nb_ops_refresh_semantic_model
+├── resources/
+│   ├── pl_master_health_pipeline.DataPipeline
+│   ├── wh_health_analytics.Warehouse
+│   ├── sem_health_analytics.SemanticModel
+│   └── rpt_healthtek_executive.Report
+└── real_time/                            Eventhouse, bases KQL, requêtes et tableau de bord temps réel
 docs/
-└── images/                      Captures du rapport et schémas
+└── images/                               Captures du rapport et schémas
 ```
 
 ---
@@ -192,7 +199,7 @@ docs/
 ## Déploiement
 
 1. Créer un Workspace Fabric sur une capacité F2 ou supérieure (ou une capacité d'essai).
-2. Connecter le Workspace à ce dépôt (**Workspace settings → Git integration → GitHub**), dossier `fabric/`, puis **Update all**. Le Lakehouse, l'Environment, les notebooks, le pipeline, le modèle sémantique et le rapport sont créés.
+2. Connecter le Workspace à ce dépôt (**Workspace settings → Git integration → GitHub**, branche `main`, dossier `fabric`), puis **Update all** dans le panneau Source control. Le Lakehouse, l'Environment, les notebooks, le pipeline, le modèle sémantique et le rapport sont créés.
 3. Attacher `lh_health_analytics` comme Lakehouse par défaut des notebooks, si Fabric ne l'a pas fait automatiquement.
 4. Lancer `pl_master_health_pipeline` avec `p_source_filter = all` pour le premier chargement.
 5. Dans les paramètres de `sem_health_analytics`, désactiver **Keep your Direct Lake data up to date** : c'est le pipeline qui publie les données, après validation.
