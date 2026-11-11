@@ -1,315 +1,216 @@
-# HealthTek Clinical Data Ingestion
+# HealthTek — Plateforme analytique des ruptures de médicaments sur Microsoft Fabric
 
-A robust, production-ready ETL pipeline for ingesting French clinical data from FINESS and IQSS sources. This project automatically extracts, transforms, and loads healthcare facility data and quality indicators.
+Plateforme de données de bout en bout qui ingère chaque jour les fichiers publics de la **Base de Données Publique des Médicaments (BDPM)** pour suivre et anticiper les **ruptures et tensions d'approvisionnement** de médicaments en France. Les données sont chargées en architecture Medallion sur Microsoft Fabric, contrôlées par un moteur de qualité, puis restituées dans un rapport Power BI en mode Direct Lake.
 
-## 📋 Overview
+![Microsoft Fabric](https://img.shields.io/badge/Microsoft%20Fabric-Lakehouse%20%7C%20Warehouse%20%7C%20Data%20Factory-5B4B9A)
+![PySpark](https://img.shields.io/badge/PySpark-Delta%20Lake-E25A1C)
+![Power BI](https://img.shields.io/badge/Power%20BI-Direct%20Lake%20%7C%20DAX-F2C811)
 
-This pipeline ingests data from two primary sources:
-
-- **FINESS**: French healthcare facility registry (Fichier National des Établissements Sanitaires et Sociaux)
-- **IQSS**: Quality and safety indicators (Indicateurs de Qualité et de Sécurité des Soins)
-
-The pipeline follows a medallion architecture with Bronze (raw) and Silver (cleaned) data layers.
-
-## ✨ Features
-
-- ✅ Automatic data extraction from data.gouv.fr APIs
-- ✅ Robust error handling with retry logic
-- ✅ Comprehensive data validation and cleaning
-- ✅ Idempotent pipeline execution
-- ✅ Structured logging and monitoring
-- ✅ Configurable via environment variables
-- ✅ Comprehensive test suite (>80% coverage)
-- ✅ Type-safe with type hints
-- ✅ Production-ready code quality
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.8 or higher
-- pip or pipenv
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/HealthTek-clinical-data-ingestion.git
-   cd HealthTek-clinical-data-ingestion
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure environment** (optional)
-   ```bash
-   cp .env.example .env
-   # Edit .env with your preferences
-   ```
-
-### Basic Usage
-
-Run the complete pipeline for specific years:
-
-```bash
-python main.py --years 2022 2023 2024
-```
-
-Run only FINESS pipeline:
-
-```bash
-python main.py --finess-only
-```
-
-Run only IQSS pipeline:
-
-```bash
-python main.py --iqss-only --years 2023
-```
-
-## 📁 Project Structure
-
-```
-HealthTek-clinical-data-ingestion/
-├── config.py                 # Configuration management
-├── main.py                   # Entry point
-├── orchestrator.py           # Pipeline orchestration
-├── requirements.txt          # Python dependencies
-├── pyproject.toml           # Project metadata and tool configs
-├── pytest.ini               # Test configuration
-│
-├── src/                     # Data sources
-│   ├── __init__.py
-│   ├── base.py             # Abstract DataSource class
-│   ├── finess.py           # FINESS source
-│   └── iqss.py             # IQSS source
-│
-├── transform/               # Data transformations
-│   ├── __init__.py
-│   ├── finess_cleaner.py   # FINESS cleaning logic
-│   ├── iqss_cleaner.py     # IQSS cleaning logic
-│   └── gold/               # Gold layer logic
-│       ├── __init__.py
-│       └── fact_establishment_quality.py
-│
-├── tests/                   # Test suite
-│   ├── conftest.py         # Shared fixtures
-│   ├── test_base.py
-│   ├── test_finess.py
-│   ├── test_iqss.py
-│   ├── test_finess_cleaner.py
-│   ├── test_iqss_cleaner.py
-│   ├── test_orchestrator.py
-│   └── test_gold_quality.py # New Gold layer tests
-│
-├── notebooks/               # Data exploration
-│   ├── 01_bronze_finess_exploration.ipynb
-│   ├── 02_bronze_iqss_exploration.ipynb
-│   ├── 03_silver_finess_exploration.ipynb
-│   ├── 04_silver_iqss_exploration.ipynb
-│   └── README.md
-│
-└── data/                    # Data directories (created automatically)
-    ├── bronze/             # Raw data
-    │   ├── finess/
-    │   └── iqss/
-    ├── silver/             # Cleaned data
-    │   ├── finess/
-    │   └── iqss/
-    └── gold/               # Analytics data
-        └── facts/          # Fact tables
-```
-
-## ⚙️ Configuration
-
-Configuration is managed through environment variables. Copy `.env.example` to `.env` and customize:
-
-```bash
-# Data directories
-BRONZE_DIR=data/bronze
-SILVER_DIR=data/silver
-
-# API Configuration
-REQUEST_TIMEOUT=30
-MAX_RETRIES=3
-RETRY_BACKOFF_FACTOR=2
-
-# Logging
-LOG_LEVEL=INFO
-```
-
-## 🧪 Testing
-
-### Run all tests
-
-```bash
-pytest
-```
-
-### Run with coverage report
-
-```bash
-pytest --cov=src --cov=transform --cov=orchestrator --cov-report=html
-```
-
-### Run specific test categories
-
-```bash
-# Unit tests only
-pytest -m unit
-
-# Integration tests only
-pytest -m integration
-```
-
-## 🛠️ Development
-
-### Install development dependencies
-
-```bash
-pip install -e ".[dev]"
-```
-
-### Code formatting
-
-```bash
-black .
-```
-
-### Linting
-
-```bash
-ruff check .
-```
-
-### Type checking
-
-```bash
-mypy src/ transform/ orchestrator.py
-```
-
-### Pre-commit hooks (optional)
-
-```bash
-pre-commit install
-pre-commit run --all-files
-```
-
-## 📊 Data Pipeline
-
-### Extraction (Bronze Layer)
-
-- **FINESS**: Downloads the latest establishment registry
-- **IQSS**: Downloads annual quality indicator files for specified years
-
-Both sources:
-- Check if data needs refresh before downloading
-- Use retry logic for network resilience
-- Create marker files to prevent redundant downloads
-
-### Transformation (Silver Layer)
-
-#### FINESS Cleaning
-
-- Applies official column headers
-- Filters for active establishments only
-- Normalizes text fields (title case, cleanup)
-- Formats SIRET to 14 digits
-- Creates standardized `finess` identifier (9 digits)
-
-#### IQSS Cleaning
-
-- Normalizes column names
-- Converts numeric columns (`nb_*`, `score_*`)
-- Cleans categorical fields (`participation`, `depot`)
-- Normalizes FINESS identifier
-- Performs data quality checks
-
-### Load (Gold Layer)
-
-The Gold layer aggregates data into analytics-ready tables:
-
-- **fact_establishment_quality**: Joins FINESS establishment details with annual IQSS scores.
-  - Calculates year-over-year evolution metrics (`score_evolution_diff`).
-  - Computes business trend indicators (`evolution_custom_trend`).
-  - Standardizes score columns across years.
-
-## 🔍 Logging
-
-The pipeline provides detailed logging at multiple levels:
-
-- **INFO**: Pipeline progress and milestones
-- **WARNING**: Data quality issues and non-critical errors
-- **ERROR**: Pipeline failures and critical issues
-- **DEBUG**: Detailed execution information
-
-Logs are written to:
-- Console (stdout)
-- `pipeline.log` file
-
-## 🐛 Error Handling
-
-The pipeline includes comprehensive error handling:
-
-- Custom exceptions for different failure types
-- Graceful degradation (continues processing other years if one fails)
-- Detailed error messages with context
-- Automatic retry for transient network errors
-
-## 📝 CLI Reference
-
-```
-usage: main.py [-h] [--years YEARS [YEARS ...]] 
-               [--bronze-dir BRONZE_DIR] [--silver-dir SILVER_DIR]
-               [--log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}]
-               [--finess-only] [--iqss-only]
-
-HealthTek Clinical Data Ingestion Pipeline
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --years YEARS [YEARS ...]
-                        Years to process for IQSS data (default: 2019-2024)
-  --bronze-dir BRONZE_DIR
-                        Directory for raw data
-  --silver-dir SILVER_DIR
-                        Directory for cleaned data
-  --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}
-                        Logging level
-  --finess-only         Only run FINESS pipeline
-  --iqss-only          Only run IQSS pipeline
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes with tests
-4. Ensure all tests pass (`pytest`)
-5. Run code quality checks (`black`, `ruff`, `mypy`)
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
-
-## 📄 License
-
-This project is provided as-is for educational and research purposes.
-
-## 🙏 Acknowledgments
-
-Data sources:
-- [data.gouv.fr](https://www.data.gouv.fr/) - French open data portal
-- FINESS data provided by the French Ministry of Health
-- IQSS data from French healthcare quality agencies
-
-## 📧 Contact
-
-For questions or support, please open an issue on GitHub.
+![Page « Ruptures » du rapport Power BI](docs/images/page_ruptures.png)
 
 ---
 
-**Built with ❤️ for better healthcare data**
+## Sommaire
+
+1. [Contexte et objectifs](#contexte-et-objectifs)
+2. [Architecture](#architecture)
+3. [Sources de données](#sources-de-données)
+4. [Couches Bronze, Silver et Gold](#couches-bronze-silver-et-gold)
+5. [Qualité des données](#qualité-des-données)
+6. [Orchestration](#orchestration)
+7. [Modèle sémantique et rapport Power BI](#modèle-sémantique-et-rapport-power-bi)
+8. [Organisation du dépôt](#organisation-du-dépôt)
+9. [Déploiement](#déploiement)
+10. [Choix techniques](#choix-techniques)
+
+---
+
+## Contexte et objectifs
+
+L'ANSM publie la liste des signalements de ruptures et de tensions d'approvisionnement, et la BDPM décrit l'ensemble des spécialités commercialisées en France : présentations, prix, compositions, groupes génériques, avis de la HAS, médicaments d'intérêt thérapeutique majeur (MITM).
+
+Le projet répond à quatre questions :
+
+- **Combien** de médicaments sont en rupture aujourd'hui, de quel type, et depuis combien de temps ?
+- **Lesquels** sont les plus exposés, et existe-t-il une alternative commercialisée dans leur groupe générique ?
+- **Quels facteurs** sont associés aux ruptures : statut générique, niveau de SMR, classe thérapeutique ATC ?
+- **Peut-on faire confiance** aux chiffres du jour ?
+
+---
+
+## Architecture
+
+```mermaid
+flowchart LR
+    BDPM["Portail BDPM<br/>11 fichiers TSV"] -->|HTTPS, retry exponentiel| LND["OneLake<br/>Files/landing"]
+    LND --> BRZ["Bronze<br/>11 tables Delta (texte brut)"]
+    BRZ --> SLV["Silver<br/>données typées, dédoublonnées<br/>+ historique des prix"]
+    SLV --> GLD["Gold<br/>galaxie : 8 dimensions,<br/>5 faits, 4 tables KPI"]
+    GLD --> WH["Warehouse T-SQL"]
+    GLD --> SM["Modèle sémantique<br/>Direct Lake"]
+    SM --> RPT["Rapport Power BI<br/>5 pages"]
+    DQ["Moteur qualité<br/>audit + quarantaine"] -.contrôle.- BRZ
+    DQ -.contrôle.- SLV
+    DQ -.contrôle.- GLD
+```
+
+| Composant Fabric | Nom | Rôle |
+| :--- | :--- | :--- |
+| Lakehouse | `lh_health_analytics` | Fichiers déposés (landing) et tables Delta des trois couches |
+| Environment | `env_health_analytics` | Runtime Spark et configuration partagés par les notebooks |
+| Notebooks | 14 notebooks PySpark | Utilitaires partagés, ingestion, transformations, qualité, exploitation |
+| Data pipeline | `pl_master_health_pipeline` | Orchestration quotidienne de bout en bout |
+| Warehouse | `wh_health_analytics` | Copie T-SQL des tables Gold pour les usages SQL |
+| Semantic model | `sem_health_analytics` | Modèle Direct Lake, 79 mesures DAX |
+| Report | `rpt_healthtek_executive` | Rapport de pilotage, 5 pages |
+
+---
+
+## Sources de données
+
+Les 11 fichiers sont téléchargés depuis le portail officiel de la BDPM, chacun selon sa propre cadence de mise à jour.
+
+| Fichier | Contenu | Cadence | Critique |
+| :--- | :--- | :--- | :---: |
+| `CIS_bdpm.txt` | Spécialités pharmaceutiques | Mensuelle | Oui |
+| `CIS_CIP_bdpm.txt` | Présentations, prix et remboursement (CIP13) | Quotidienne | Oui |
+| `CIS_CIP_Dispo_Spec.txt` | Ruptures et tensions d'approvisionnement (ANSM) | Bimensuelle | Oui |
+| `CIS_COMPO_bdpm.txt` | Compositions et substances actives | Mensuelle | |
+| `CIS_HAS_SMR_bdpm.txt` | Avis HAS : service médical rendu | Mensuelle | |
+| `CIS_HAS_ASMR_bdpm.txt` | Avis HAS : amélioration du SMR | Mensuelle | |
+| `HAS_LiensPageCT_bdpm.txt` | Liens vers les avis de la commission de la transparence | Mensuelle | |
+| `CIS_GENER_bdpm.txt` | Groupes génériques | Mensuelle | |
+| `CIS_CPD_bdpm.txt` | Conditions de prescription et de délivrance | Mensuelle | |
+| `CIS_MITM.txt` | Médicaments d'intérêt thérapeutique majeur et classe ATC | Mensuelle | |
+| `CIS_InfoImportantes.txt` | Informations de sécurité de l'ANSM | Quotidienne | |
+
+En mode `auto`, le pipeline ne télécharge que les sources dont l'intervalle de mise à jour est échu. Chaque dépôt est horodaté, validé (taille, HTML d'erreur, nombre de colonnes, encodage), converti en UTF-8, puis écrit de façon atomique avec un manifeste JSON.
+
+---
+
+## Couches Bronze, Silver et Gold
+
+**Bronze** — le dernier dépôt de chaque source est chargé tel quel, en texte, avec un schéma positionnel explicite et cinq colonnes d'audit : date d'ingestion, fichier source, système source, identifiant du run et date de l'instantané.
+
+**Silver** — chaque source est nettoyée et typée de façon déterministe : dates multi-formats, montants au format français, validation de la clé EAN-13 des codes CIP13, normalisation des libellés, rangs ordinaux des avis SMR et ASMR, extraction des liens des informations de sécurité. Aucune ligne n'est supprimée en silence : les lignes invalides et les doublons écartés sont conservés dans `_dq_quarantine` avec le motif du rejet. L'historique des prix est conservé jour après jour dans `silver_bdpm_cip_history`.
+
+**Gold** — un modèle en galaxie, construit avec des clés de substitution déterministes (`xxhash64`) :
+
+| Type | Tables |
+| :--- | :--- |
+| Dimensions (8) | médicament, présentation, groupe générique, substance, classe ATC, statut ANSM, niveau d'avis HAS, calendrier |
+| Faits (5) | prix et remboursement, ruptures, avis HAS, informations de sécurité, composition |
+| KPI (4) | score de risque de rupture, écart de prix princeps / générique, variation des prix, signalements mensuels |
+
+Les codes présents dans un fichier mais absents du référentiel des spécialités deviennent des **membres inférés**, et chaque dimension possède un membre « inconnu » (`-1`). Le rapport ne perd ainsi aucune ligne de fait.
+
+Le **score de risque de rupture** combine le nombre et la durée des ruptures, les ruptures en cours, leur récence, le statut MITM et l'absence d'alternative commercialisée dans le groupe générique.
+
+![Modèle en galaxie](docs/images/modele_semantique.png)
+
+---
+
+## Qualité des données
+
+Le moteur `nb_util_validation` évalue en une passe Spark par table un catalogue de règles déclaratives : non-nullité, unicité, plages de valeurs, expressions régulières, intégrité référentielle, fraîcheur, réconciliation entre couches, continuité du calendrier.
+
+- Chaque contrôle est historisé dans `_dq_audit_log` : règle, couche, sévérité, lignes en infraction, run.
+- Une **porte qualité** après chaque couche bloque le pipeline si une règle critique échoue.
+- La page « Qualité » du rapport affiche le taux de réussite du dernier run, les échecs critiques, la quarantaine et la part de membres inférés.
+
+---
+
+## Orchestration
+
+Le pipeline `pl_master_health_pipeline` enchaîne 13 étapes. Chacune possède sa propre branche d'alerte et d'échec, avec le message d'erreur réel de l'activité.
+
+```mermaid
+flowchart TD
+    A["Verrou anti-concurrence"] --> B["Initialisation du landing"] --> C["Ingestion BDPM"]
+    C --> D["Bronze"] --> E{"Porte qualité Bronze"}
+    E --> F["Silver"] --> G{"Porte qualité Silver"}
+    G --> H["Gold"] --> I{"Porte qualité Gold"}
+    I --> J["Synchronisation Warehouse"] --> K["Rafraîchissement du modèle Direct Lake"]
+    K --> L["Maintenance Delta (hebdomadaire)"]
+    L -->|succès, échec ou étape ignorée| M["Libération du verrou"]
+```
+
+| Principe | Mise en œuvre |
+| :--- | :--- |
+| Pas d'exécutions concurrentes | `concurrency = 1` et verrou coopératif dans une table Delta, avec expiration |
+| Verrou toujours libéré | La dernière étape dépend de la précédente en `Succeeded`, `Failed` **et** `Skipped` |
+| Rejeu d'une date | Paramètre `p_run_date` : toutes les étapes sont idempotentes |
+| Publication cohérente | Le modèle Direct Lake est recadré une seule fois, **après** la porte qualité Gold |
+| Reprises ciblées | Plusieurs tentatives sur l'ingestion réseau, une sur les étapes Spark idempotentes, aucune sur les portes qualité |
+| Observabilité | Module `logging` (horodatage, niveau, origine) et sortie JSON de chaque notebook lue par le pipeline |
+
+Paramètres : `p_source_filter`, `p_fail_fast`, `p_skip_warehouse`, `p_run_date`, `p_gold_mode`, `p_run_maintenance`, `p_vacuum_retain_hours`.
+
+---
+
+## Modèle sémantique et rapport Power BI
+
+Le modèle `sem_health_analytics` lit directement les tables Delta en mode **Direct Lake** : performances d'un modèle importé, sans copie de données. Ses 79 mesures DAX utilisent systématiquement `DIVIDE`, recalculent les ratios au lieu de faire des moyennes de taux, et départagent les « Top 10 » avec `ROWNUMBER`.
+
+| Page | Contenu |
+| :--- | :--- |
+| Ruptures | Signalements actifs, médicaments touchés, durée moyenne, répartition par classification et par durée, évolution trimestrielle, ruptures actives les plus longues |
+| Risque | Médicaments à risque critique, MITM en rupture, absence d'alternative, score moyen par classe ATC |
+| Corrélation | Taux de rupture selon le statut générique, le SMR et le statut ANSM ; durée et volume par classe ATC |
+| Économie | Prix moyen, part des boîtes remboursables, écart de prix princeps / générique |
+| Qualité | Réussite des contrôles, échecs critiques, quarantaine, membres inférés |
+
+| | |
+| :---: | :---: |
+| ![Risque](docs/images/page_risque.png) | ![Corrélation](docs/images/page_correlation.png) |
+| ![Économie](docs/images/page_economie.png) | ![Qualité](docs/images/page_qualite.png) |
+
+---
+
+## Organisation du dépôt
+
+```text
+fabric/                          Items Microsoft Fabric (format Git integration)
+├── notebooks/
+│   ├── utilities/               nb_util_config, nb_util_io, nb_util_logging, nb_util_validation
+│   ├── bronze/                  nb_bronze_ingest_bdpm, nb_bronze_load_bdpm
+│   ├── silver/                  nb_silver_clean_bdpm
+│   ├── gold/                    nb_gold_build_galaxy
+│   ├── quality/                 nb_dq_validate_layer
+│   ├── warehouse/               nb_warehouse_sync_gold
+│   └── ops/                     nb_ops_setup_folders, nb_ops_run_guard,
+│                                nb_ops_maintenance_delta, nb_ops_refresh_semantic_model
+├── pl_master_health_pipeline.DataPipeline/
+├── sem_health_analytics.SemanticModel/
+└── rpt_healthtek_executive.Report/
+docs/
+└── images/                      Captures du rapport et schémas
+```
+
+---
+
+## Déploiement
+
+1. Créer un Workspace Fabric sur une capacité F2 ou supérieure (ou une capacité d'essai).
+2. Connecter le Workspace à ce dépôt (**Workspace settings → Git integration → GitHub**), dossier `fabric/`, puis **Update all**. Le Lakehouse, l'Environment, les notebooks, le pipeline, le modèle sémantique et le rapport sont créés.
+3. Attacher `lh_health_analytics` comme Lakehouse par défaut des notebooks, si Fabric ne l'a pas fait automatiquement.
+4. Lancer `pl_master_health_pipeline` avec `p_source_filter = all` pour le premier chargement.
+5. Dans les paramètres de `sem_health_analytics`, désactiver **Keep your Direct Lake data up to date** : c'est le pipeline qui publie les données, après validation.
+6. Planifier le pipeline (par exemple tous les jours à 2 h).
+
+---
+
+## Choix techniques
+
+- **Lakehouse et Delta Lake** pour les trois couches : transactions ACID, `MERGE` idempotent, `replaceWhere` par instantané, time travel.
+- **Notebooks utilitaires chargés par `%run`** : une seule source de vérité pour la configuration, les accès aux tables et la journalisation, sans packaging de bibliothèque.
+- **Clés de substitution déterministes** : les clés restent identiques d'un run à l'autre, ce qui rend les rechargements reproductibles.
+- **Direct Lake** plutôt qu'Import : pas de copie des données, recadrage en quelques secondes après chaque chargement.
+- **Warehouse T-SQL** alimenté depuis Gold pour les usages SQL, avec contrôles d'intégrité après chargement (orphelins, doublons).
+
+---
+
+## Auteur
+
+**Gane Kwada Amala** — Data Engineer
+[LinkedIn](https://www.linkedin.com/in/gane-kwada-amala) · Données : [BDPM](https://base-donnees-publique.medicaments.gouv.fr/), ANSM, HAS (licence ouverte).
