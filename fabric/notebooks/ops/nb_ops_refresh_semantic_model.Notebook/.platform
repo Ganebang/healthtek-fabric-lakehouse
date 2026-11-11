@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_ops_refresh_semantic_model",
+    "description": "HealthTek — reframe Direct Lake de sem_health_analytics après la porte qualité Gold"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "227eef9a-9d05-aecc-473f-4228791097ba"
+  }
+}

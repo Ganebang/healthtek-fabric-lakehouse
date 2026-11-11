@@ -1,0 +1,77 @@
+table gold_dim_opinion_level
+	lineageTag: 08b203af-4823-4415-8bce-31e8e0ece6e6
+	sourceLineageTag: [dbo].[gold_dim_opinion_level]
+
+	column opinion_type
+		dataType: string
+		lineageTag: b37b02f0-7ec2-4533-b5f6-9f75e1defb85
+		sourceLineageTag: opinion_type
+		summarizeBy: none
+		sourceColumn: opinion_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column level_label
+		dataType: string
+		lineageTag: 294f1ec0-f30c-4ab3-b686-a12bf2008531
+		sourceLineageTag: level_label
+		summarizeBy: none
+		sourceColumn: level_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column level_rank
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ff2fc88-b1cd-4ab6-84eb-aed200aa60b5
+		sourceLineageTag: level_rank
+		summarizeBy: sum
+		sourceColumn: level_rank
+
+		annotation SummarizationSetBy = Automatic
+
+	column level_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 03633012-4784-4ffb-aa43-6e7abe6d0d0c
+		sourceLineageTag: level_sk
+		summarizeBy: sum
+		sourceColumn: level_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_ranked
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 57b4c329-b5e3-4333-9f03-8dbd4b4d529c
+		sourceLineageTag: is_ranked
+		summarizeBy: none
+		sourceColumn: is_ranked
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6790aef4-0e64-44f5-8a69-4bfc8db6c48c
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 73d20544-af8e-44d1-9b29-6a257ce5f5ff
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_opinion_level = entity
+		mode: directLake
+		source
+			entityName: gold_dim_opinion_level
+			expressionSource: 'DirectLake - lh_health_analytics'
+

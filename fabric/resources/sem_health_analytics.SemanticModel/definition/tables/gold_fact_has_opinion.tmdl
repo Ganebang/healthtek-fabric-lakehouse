@@ -1,0 +1,161 @@
+table gold_fact_has_opinion
+	lineageTag: 7de20bc8-2e59-4c90-b95c-c2faafadc8e0
+	sourceLineageTag: [dbo].[gold_fact_has_opinion]
+
+	column opinion_key
+		dataType: string
+		lineageTag: fa1d53e9-2ebd-4a19-a26c-846a89de80c0
+		sourceLineageTag: opinion_key
+		summarizeBy: none
+		sourceColumn: opinion_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a701527-f333-463f-bfe8-aa175075c1e6
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column level_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d9f82a1-e3f6-4a79-b51a-f77615d24cef
+		sourceLineageTag: level_sk
+		summarizeBy: sum
+		sourceColumn: level_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: d9273d8e-a846-4e6e-b361-e658a48a5091
+		sourceLineageTag: time_sk
+		summarizeBy: sum
+		sourceColumn: time_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: e402d764-d509-4649-96c6-a50f0316b6fe
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_dossier_has
+		dataType: string
+		lineageTag: d4583082-ae9f-48e4-8062-a5da885233ff
+		sourceLineageTag: code_dossier_has
+		summarizeBy: none
+		sourceColumn: code_dossier_has
+
+		annotation SummarizationSetBy = Automatic
+
+	column opinion_type
+		dataType: string
+		lineageTag: a88a10be-8043-43af-bd56-d268ae88fcdd
+		sourceLineageTag: opinion_type
+		summarizeBy: none
+		sourceColumn: opinion_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column motif_evaluation
+		dataType: string
+		lineageTag: 92761369-1603-4e74-99b5-0715c7018d67
+		sourceLineageTag: motif_evaluation
+		summarizeBy: none
+		sourceColumn: motif_evaluation
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_avis
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 49814089-1efa-4d8b-b66f-52064b4e4d0a
+		sourceLineageTag: date_avis
+		summarizeBy: none
+		sourceColumn: date_avis
+
+		annotation SummarizationSetBy = Automatic
+
+	column level_label
+		dataType: string
+		lineageTag: 2622c474-9414-4e20-844e-056341ec53e7
+		sourceLineageTag: level_label
+		summarizeBy: none
+		sourceColumn: level_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column level_rank
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a8eeae4-b5f4-4a8c-8068-96438e0fa4cd
+		sourceLineageTag: level_rank
+		summarizeBy: sum
+		sourceColumn: level_rank
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_latest_avis
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e828629b-1a0b-48c5-9481-05708e763443
+		sourceLineageTag: is_latest_avis
+		summarizeBy: none
+		sourceColumn: is_latest_avis
+
+		annotation SummarizationSetBy = Automatic
+
+	column opinion_text
+		dataType: string
+		lineageTag: 5d6c407c-b67d-4db5-a3e8-bca3c3cfdc87
+		sourceLineageTag: opinion_text
+		summarizeBy: none
+		sourceColumn: opinion_text
+
+		annotation SummarizationSetBy = Automatic
+
+	column ct_url
+		dataType: string
+		lineageTag: d2fa153d-9011-47e7-b5e7-8b211ed72b05
+		sourceLineageTag: ct_url
+		summarizeBy: none
+		sourceColumn: ct_url
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4067728b-8a25-4647-830b-8b4407fb2ca1
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 22b59ef5-677b-495c-8293-898d2d5b802a
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_has_opinion = entity
+		mode: directLake
+		source
+			entityName: gold_fact_has_opinion
+			expressionSource: 'DirectLake - lh_health_analytics'
+

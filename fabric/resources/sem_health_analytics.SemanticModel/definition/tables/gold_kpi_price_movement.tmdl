@@ -1,0 +1,124 @@
+table gold_kpi_price_movement
+	lineageTag: a40e8c11-462a-418b-bb14-fb7c4caf2355
+	sourceLineageTag: [dbo].[gold_kpi_price_movement]
+
+	column cip13
+		dataType: string
+		lineageTag: 6ce16a81-1206-487d-a0bc-f6c51479439e
+		sourceLineageTag: cip13
+		summarizeBy: none
+		sourceColumn: cip13
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: 24483964-acfc-4271-8334-67add45452c9
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_previous
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 02fd4a15-fca9-4bed-8105-c23c2faaefd7
+		sourceLineageTag: snapshot_previous
+		summarizeBy: none
+		sourceColumn: snapshot_previous
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_current
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6c49d69f-1ac3-4032-afad-b296d34b3519
+		sourceLineageTag: snapshot_current
+		summarizeBy: none
+		sourceColumn: snapshot_current
+
+		annotation SummarizationSetBy = Automatic
+
+	column price_previous
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 20c63d15-afeb-4f9e-b30c-797ddd8e08bb
+		sourceLineageTag: price_previous
+		summarizeBy: sum
+		sourceColumn: price_previous
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column price_current
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 0448073a-89e6-4eba-8593-4999e2863264
+		sourceLineageTag: price_current
+		summarizeBy: sum
+		sourceColumn: price_current
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column price_delta
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c812c21f-7fed-46c7-89e0-7674bffec97a
+		sourceLineageTag: price_delta
+		summarizeBy: sum
+		sourceColumn: price_delta
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column price_delta_pct
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: bb428403-2a17-4197-a4fd-89b98dd1c456
+		sourceLineageTag: price_delta_pct
+		summarizeBy: sum
+		sourceColumn: price_delta_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column movement
+		dataType: string
+		lineageTag: 21080c34-5bdf-4edb-abb2-92e5f3eab69a
+		sourceLineageTag: movement
+		summarizeBy: none
+		sourceColumn: movement
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 13717d7d-bc92-45dd-9a7b-97a06b920c48
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 07073037-3e1b-469f-b72c-e5cabfb6ee24
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_kpi_price_movement = entity
+		mode: directLake
+		source
+			entityName: gold_kpi_price_movement
+			expressionSource: 'DirectLake - lh_health_analytics'
+

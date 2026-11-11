@@ -1,0 +1,180 @@
+table _dq_audit_log
+	lineageTag: 542cf52a-e41b-4698-a256-2b8adc463746
+	sourceLineageTag: [dbo].[_dq_audit_log]
+
+	column rule
+		dataType: string
+		lineageTag: 30bb29fc-f024-42c4-a2dc-d17814380586
+		sourceLineageTag: rule
+		summarizeBy: none
+		sourceColumn: rule
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: f2c8385f-16e3-4578-a701-ae2f0dd5c2a1
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column table_name
+		dataType: string
+		lineageTag: ff1563a6-cd3a-4e3a-acbb-a74d42bbadbf
+		sourceLineageTag: table_name
+		summarizeBy: none
+		sourceColumn: table_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column layer
+		dataType: string
+		lineageTag: d41b73bd-67d2-4fd1-85fc-d244a2dc433f
+		sourceLineageTag: layer
+		summarizeBy: none
+		sourceColumn: layer
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity
+		dataType: string
+		lineageTag: 39209c37-dc42-4479-96ce-7570520281cd
+		sourceLineageTag: severity
+		summarizeBy: none
+		sourceColumn: severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column rule_type
+		dataType: string
+		lineageTag: fc4d3261-6236-46bd-a282-e89ba2aa65c6
+		sourceLineageTag: rule_type
+		summarizeBy: none
+		sourceColumn: rule_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column column_name
+		dataType: string
+		lineageTag: 9802a375-7b47-4870-9043-cc1b48a7f557
+		sourceLineageTag: column_name
+		summarizeBy: none
+		sourceColumn: column_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: d4a713d2-6e60-4c4c-b922-48d600da9fc0
+		sourceLineageTag: total_rows
+		summarizeBy: none
+		sourceColumn: total_rows
+
+		annotation SummarizationSetBy = Automatic
+
+	column failures
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7165763a-24ce-4bbb-a9fd-79ba4535ca6c
+		sourceLineageTag: failures
+		summarizeBy: none
+		sourceColumn: failures
+
+		annotation SummarizationSetBy = Automatic
+
+	column failure_pct
+		dataType: double
+		formatString: 0.00
+		lineageTag: 2bdc4d94-d70e-4d8c-b10f-5c463dad0d74
+		sourceLineageTag: failure_pct
+		summarizeBy: none
+		sourceColumn: failure_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column pass_rate
+		dataType: double
+		formatString: 0.00
+		lineageTag: 2c0b8940-9921-443c-b895-6c8a5fbbab5f
+		sourceLineageTag: pass_rate
+		summarizeBy: none
+		sourceColumn: pass_rate
+
+		annotation SummarizationSetBy = Automatic
+
+	column passed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9805a930-4171-4a4c-8fb3-0c804e325fbd
+		sourceLineageTag: passed
+		summarizeBy: none
+		sourceColumn: passed
+
+		annotation SummarizationSetBy = Automatic
+
+	column skipped
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b2499d6f-9fab-4b58-a97d-183a830e3f60
+		sourceLineageTag: skipped
+		summarizeBy: none
+		sourceColumn: skipped
+
+		annotation SummarizationSetBy = Automatic
+
+	column checked_at
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: f80c2e9a-6f4b-4483-be68-89542431180f
+		sourceLineageTag: checked_at
+		summarizeBy: none
+		sourceColumn: checked_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column pipeline_run_id
+		dataType: string
+		lineageTag: 0bc5cba6-a8f0-46bc-9b4c-45bf5502a001
+		sourceLineageTag: pipeline_run_id
+		summarizeBy: none
+		sourceColumn: pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column attempt_id
+		dataType: string
+		lineageTag: 14215ec3-14ee-4907-b390-cc8dffde76bd
+		sourceLineageTag: attempt_id
+		summarizeBy: none
+		sourceColumn: attempt_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column as_of_date
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: 2bd9f862-764a-497a-a1f5-b7216dc0bce5
+		sourceLineageTag: as_of_date
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column error
+		dataType: string
+		lineageTag: 40a1dd8f-baa7-44bb-add4-b46de436e2f9
+		sourceLineageTag: error
+		summarizeBy: none
+		sourceColumn: error
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _dq_audit_log = entity
+		mode: directLake
+		source
+			entityName: _dq_audit_log
+			expressionSource: 'DirectLake - lh_health_analytics'
+

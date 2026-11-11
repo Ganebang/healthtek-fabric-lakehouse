@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLQueryset",
+    "displayName": "kql_queries_shortages",
+    "description": "kql_queries_shortages"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8abf3c22-4723-b5ae-4d0d-d2cc25e8c7c5"
+  }
+}

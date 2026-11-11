@@ -1,0 +1,77 @@
+table gold_dim_substance
+	lineageTag: 21560f36-7b95-42be-85ce-e06968469ef2
+	sourceLineageTag: [dbo].[gold_dim_substance]
+
+	column code_substance
+		dataType: string
+		lineageTag: a5eab5b7-9ed2-4cf4-be7d-a23bdab17e8e
+		sourceLineageTag: code_substance
+		summarizeBy: none
+		sourceColumn: code_substance
+
+		annotation SummarizationSetBy = Automatic
+
+	column denomination_substance
+		dataType: string
+		lineageTag: b2b42bd5-fe9f-44a7-9778-266b6f9b0fb4
+		sourceLineageTag: denomination_substance
+		summarizeBy: none
+		sourceColumn: denomination_substance
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 19930ceb-a7bd-47e5-9a11-e1c81e773152
+		sourceLineageTag: drug_count
+		summarizeBy: sum
+		sourceColumn: drug_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_count_as_active
+		dataType: int64
+		formatString: 0
+		lineageTag: 49329565-529f-4af6-9276-3fd6e4286d52
+		sourceLineageTag: drug_count_as_active
+		summarizeBy: sum
+		sourceColumn: drug_count_as_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column substance_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 47da8609-3eb1-4345-b6d4-13c6175b6aaa
+		sourceLineageTag: substance_sk
+		summarizeBy: sum
+		sourceColumn: substance_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bb06af78-9b5c-4bb1-a370-495eb08301da
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: d9684a48-e0c4-45bb-b05d-f7dae3dba0d2
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_substance = entity
+		mode: directLake
+		source
+			entityName: gold_dim_substance
+			expressionSource: 'DirectLake - lh_health_analytics'
+

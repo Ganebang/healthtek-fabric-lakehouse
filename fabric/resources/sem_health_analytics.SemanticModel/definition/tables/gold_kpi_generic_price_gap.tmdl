@@ -1,0 +1,110 @@
+table gold_kpi_generic_price_gap
+	lineageTag: 952a7b61-8a38-45ac-960b-123e3c9912f7
+	sourceLineageTag: [dbo].[gold_kpi_generic_price_gap]
+
+	column generic_group_id
+		dataType: string
+		lineageTag: 761f4995-8b09-4ff7-a131-c0cada735dd1
+		sourceLineageTag: generic_group_id
+		summarizeBy: none
+		sourceColumn: generic_group_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column libelle_groupe
+		dataType: string
+		lineageTag: b4f8595b-e3bd-4823-a4c0-daba1a698562
+		sourceLineageTag: libelle_groupe
+		summarizeBy: none
+		sourceColumn: libelle_groupe
+
+		annotation SummarizationSetBy = Automatic
+
+	column princeps_priced
+		dataType: int64
+		formatString: 0
+		lineageTag: a785e415-1335-40ff-91ff-c691af9582a8
+		sourceLineageTag: princeps_priced
+		summarizeBy: sum
+		sourceColumn: princeps_priced
+
+		annotation SummarizationSetBy = Automatic
+
+	column generic_priced
+		dataType: int64
+		formatString: 0
+		lineageTag: 804c789a-580f-4868-9697-2502dffd359b
+		sourceLineageTag: generic_priced
+		summarizeBy: sum
+		sourceColumn: generic_priced
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_princeps_price
+		dataType: double
+		lineageTag: f2cdfe99-43df-4344-844c-bbee8cb4e617
+		sourceLineageTag: avg_princeps_price
+		summarizeBy: sum
+		sourceColumn: avg_princeps_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_generic_price
+		dataType: double
+		lineageTag: 5d0f443d-7fce-45d1-b9d6-ae29a7410580
+		sourceLineageTag: avg_generic_price
+		summarizeBy: sum
+		sourceColumn: avg_generic_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gap_pct
+		dataType: double
+		lineageTag: 4d354dc2-f011-43bd-95a3-51122a9e1cb2
+		sourceLineageTag: gap_pct
+		summarizeBy: sum
+		sourceColumn: gap_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column group_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 9b9870ca-01ab-44c9-a04c-40c974b02b01
+		sourceLineageTag: group_sk
+		summarizeBy: sum
+		sourceColumn: group_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b23ceabc-dec4-4663-9cfe-f6b1ccbd4bd4
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 86965222-83ed-4cdd-a8b3-a04df8270b8f
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_kpi_generic_price_gap = entity
+		mode: directLake
+		source
+			entityName: gold_kpi_generic_price_gap
+			expressionSource: 'DirectLake - lh_health_analytics'
+

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Environment",
+    "displayName": "env_health_analytics",
+    "description": "Environment"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4ccb473b-79e8-8dc0-4d10-50b7ebb8a82d"
+  }
+}

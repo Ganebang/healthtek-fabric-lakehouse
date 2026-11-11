@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "pageOrder": [
+    "a1ruptures0000000001",
+    "a2risque000000000002",
+    "a3correlation0000003",
+    "a4economie000000004",
+    "a5qualite0000000005"
+  ],
+  "activePageName": "a1ruptures0000000001"
+}

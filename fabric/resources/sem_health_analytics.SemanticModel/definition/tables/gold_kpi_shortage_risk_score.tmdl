@@ -1,0 +1,225 @@
+table gold_kpi_shortage_risk_score
+	lineageTag: a60ee5d9-065e-4558-8cf7-7f53d5a9a934
+	sourceLineageTag: [dbo].[gold_kpi_shortage_risk_score]
+
+	column cis_code
+		dataType: string
+		lineageTag: ead46455-636e-4c39-96cc-587ad50ba9a5
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 95ae183a-d9f5-4529-876c-40c1b9be01fd
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column denomination
+		dataType: string
+		lineageTag: e7501b20-1c67-45d2-b3a7-1ba4eb633042
+		sourceLineageTag: denomination
+		summarizeBy: none
+		sourceColumn: denomination
+
+		annotation SummarizationSetBy = Automatic
+
+	column substance_active_primary
+		dataType: string
+		lineageTag: 7791d830-2317-4f85-983f-22c27b29f0fe
+		sourceLineageTag: substance_active_primary
+		summarizeBy: none
+		sourceColumn: substance_active_primary
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level1
+		dataType: string
+		lineageTag: 6cf9174b-4f86-46e5-9c8d-a522332112a1
+		sourceLineageTag: atc_level1
+		summarizeBy: none
+		sourceColumn: atc_level1
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level1_label
+		dataType: string
+		lineageTag: 6948fa6f-0888-4619-9e19-f0d20b9f4893
+		sourceLineageTag: atc_level1_label
+		summarizeBy: none
+		sourceColumn: atc_level1_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_mitm
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0150af5e-ff30-4991-9dc4-c7e3eea2beaf
+		sourceLineageTag: is_mitm
+		summarizeBy: none
+		sourceColumn: is_mitm
+
+		annotation SummarizationSetBy = Automatic
+
+	column in_generic_group
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6c8f6b0b-d903-49d3-87d1-e5359d054023
+		sourceLineageTag: in_generic_group
+		summarizeBy: none
+		sourceColumn: in_generic_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column alternatives_available
+		dataType: int64
+		formatString: 0
+		lineageTag: 9b433325-20b6-466b-8b49-c3795928b2e5
+		sourceLineageTag: alternatives_available
+		summarizeBy: sum
+		sourceColumn: alternatives_available
+
+		annotation SummarizationSetBy = Automatic
+
+	column no_alternative
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7a3359f5-e9c7-4d08-a5a8-7fe165be19a4
+		sourceLineageTag: no_alternative
+		summarizeBy: none
+		sourceColumn: no_alternative
+
+		annotation SummarizationSetBy = Automatic
+
+	column shortage_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c636449-7a21-42ef-9908-dd675ef9d5b6
+		sourceLineageTag: shortage_count
+		summarizeBy: sum
+		sourceColumn: shortage_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_shortage_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 097719a5-2af5-4533-8c09-daaea44d6627
+		sourceLineageTag: total_shortage_days
+		summarizeBy: sum
+		sourceColumn: total_shortage_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_duration_days
+		dataType: double
+		lineageTag: 28c645a0-5846-457a-af5c-021b0d2f0eef
+		sourceLineageTag: avg_duration_days
+		summarizeBy: sum
+		sourceColumn: avg_duration_days
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column max_duration_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d7e6610-1de4-4829-a07d-5a2426656937
+		sourceLineageTag: max_duration_days
+		summarizeBy: sum
+		sourceColumn: max_duration_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column active_shortages
+		dataType: int64
+		formatString: 0
+		lineageTag: 18ea6cf2-4d4e-432a-b234-c936b07edb0c
+		sourceLineageTag: active_shortages
+		summarizeBy: sum
+		sourceColumn: active_shortages
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_shortage_start
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 65bdee20-8d9d-4020-acf3-0a0b75350a1f
+		sourceLineageTag: last_shortage_start
+		summarizeBy: none
+		sourceColumn: last_shortage_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_since_last_shortage
+		dataType: int64
+		formatString: 0
+		lineageTag: bc20c03d-4bea-46bf-a0c2-29d3015c14c1
+		sourceLineageTag: days_since_last_shortage
+		summarizeBy: sum
+		sourceColumn: days_since_last_shortage
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_score
+		dataType: double
+		lineageTag: d44cd7ef-b0a0-4da6-a727-de62efa8d0ca
+		sourceLineageTag: risk_score
+		summarizeBy: sum
+		sourceColumn: risk_score
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column risk_category
+		dataType: string
+		lineageTag: 79f8444b-9cdc-40b8-97cb-279357891eaf
+		sourceLineageTag: risk_category
+		summarizeBy: none
+		sourceColumn: risk_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column as_of_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bae520ee-78f3-465f-9ca2-16cb781d735d
+		sourceLineageTag: as_of_date
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9e90af79-81d9-4a9d-ad6d-97c6514d1b20
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: d936064f-2c66-4a7d-ba1e-afe7a340729b
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_kpi_shortage_risk_score = entity
+		mode: directLake
+		source
+			entityName: gold_kpi_shortage_risk_score
+			expressionSource: 'DirectLake - lh_health_analytics'
+

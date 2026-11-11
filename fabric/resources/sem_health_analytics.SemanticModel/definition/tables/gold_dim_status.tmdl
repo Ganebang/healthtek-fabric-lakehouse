@@ -1,0 +1,78 @@
+table gold_dim_status
+	lineageTag: 6e1db430-5f37-4c61-8073-400722ecfb7c
+	sourceLineageTag: [dbo].[gold_dim_status]
+
+	column status_code
+		dataType: int64
+		formatString: 0
+		lineageTag: 65ee9437-a04c-4d70-b678-f01eb19959f0
+		sourceLineageTag: status_code
+		summarizeBy: sum
+		sourceColumn: status_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_label
+		dataType: string
+		lineageTag: d30fedc3-2afb-456d-90c4-bde5026bd681
+		sourceLineageTag: status_label
+		summarizeBy: none
+		sourceColumn: status_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: efce1bb2-e398-4748-8d84-759a0d3f8397
+		sourceLineageTag: is_active
+		summarizeBy: none
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity
+		dataType: int64
+		formatString: 0
+		lineageTag: 43930cc4-79a7-41df-a61c-e3b44053e253
+		sourceLineageTag: severity
+		summarizeBy: sum
+		sourceColumn: severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: d049f896-1299-4a16-873b-e8ed2c032c64
+		sourceLineageTag: status_sk
+		summarizeBy: sum
+		sourceColumn: status_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 854abfd6-e006-4759-814e-05d097f9aba7
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 2cb1abab-9282-46ba-8bac-52d2d26ac843
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_status = entity
+		mode: directLake
+		source
+			entityName: gold_dim_status
+			expressionSource: 'DirectLake - lh_health_analytics'
+

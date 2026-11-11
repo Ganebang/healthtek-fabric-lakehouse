@@ -1,0 +1,154 @@
+table gold_fact_presentation_price
+	lineageTag: 43810259-180d-4953-a033-23dedb41b690
+	sourceLineageTag: [dbo].[gold_fact_presentation_price]
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 738ee5bb-1ad0-4104-8449-9a4330e00700
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column presentation_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: ce5b629c-0548-44d6-b062-cbfe50753a58
+		sourceLineageTag: presentation_sk
+		summarizeBy: sum
+		sourceColumn: presentation_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: fab2e3c2-9557-4707-9c2e-46e40a29dfe3
+		sourceLineageTag: time_sk
+		summarizeBy: sum
+		sourceColumn: time_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: 62dd11db-35a4-4c7a-835d-64fcc7c00e09
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column cip13
+		dataType: string
+		lineageTag: e6a9a503-7e47-4e3e-8e6f-351c4d86696f
+		sourceLineageTag: cip13
+		summarizeBy: none
+		sourceColumn: cip13
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3aef9b9e-8df1-4f5a-8d63-67c70b6cccf5
+		sourceLineageTag: snapshot_date
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column prix_hors_honoraires
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 6595a273-1390-4878-8da2-5f1109d4af0e
+		sourceLineageTag: prix_hors_honoraires
+		summarizeBy: sum
+		sourceColumn: prix_hors_honoraires
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column prix_avec_honoraires
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 5323e87a-84e3-4730-8cd6-cc3041fcb50d
+		sourceLineageTag: prix_avec_honoraires
+		summarizeBy: sum
+		sourceColumn: prix_avec_honoraires
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column taux_remboursement
+		dataType: double
+		lineageTag: 83e784fb-15cd-49f1-a1df-05686e7ef507
+		sourceLineageTag: taux_remboursement
+		summarizeBy: sum
+		sourceColumn: taux_remboursement
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column honoraires_dispensation
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b3810cd9-fd80-4e2f-939e-ad3310c8680e
+		sourceLineageTag: honoraires_dispensation
+		summarizeBy: sum
+		sourceColumn: honoraires_dispensation
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column has_price
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 11fc67bf-42da-4ebb-acbd-5850c5a4cec0
+		sourceLineageTag: has_price
+		summarizeBy: none
+		sourceColumn: has_price
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_reimbursed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 21e587ea-8024-4b9a-8136-c3cb8ee9bb15
+		sourceLineageTag: is_reimbursed
+		summarizeBy: none
+		sourceColumn: is_reimbursed
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 365cffc6-3dbf-4750-8b14-b14c21418a25
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 88df355b-0bda-44eb-b325-b8ca3e508e25
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_presentation_price = entity
+		mode: directLake
+		source
+			entityName: gold_fact_presentation_price
+			expressionSource: 'DirectLake - lh_health_analytics'
+

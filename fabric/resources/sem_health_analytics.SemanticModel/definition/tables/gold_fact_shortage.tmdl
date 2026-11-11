@@ -1,0 +1,233 @@
+table gold_fact_shortage
+	lineageTag: 7f2df447-31cd-4bb5-924d-3d458dd7a3df
+	sourceLineageTag: [dbo].[gold_fact_shortage]
+
+	column shortage_key
+		dataType: string
+		lineageTag: 873ea776-70b0-46b8-b4a8-9f027c23dc3e
+		sourceLineageTag: shortage_key
+		summarizeBy: none
+		sourceColumn: shortage_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: cf13054c-ae1d-41bf-a58a-8c90f6cd054d
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column presentation_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 1fb34804-7d69-4db3-a2f3-cb8ee5ce58d7
+		sourceLineageTag: presentation_sk
+		summarizeBy: sum
+		sourceColumn: presentation_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: dc5ee710-0b42-4bda-ba53-6d372e7dc8ea
+		sourceLineageTag: status_sk
+		summarizeBy: sum
+		sourceColumn: status_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 9edfe94d-1e7f-4ae0-b47d-2bde3db71a39
+		sourceLineageTag: time_sk
+		summarizeBy: sum
+		sourceColumn: time_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_end_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 82494db3-7efd-46fd-8cff-570364c5ec91
+		sourceLineageTag: time_end_sk
+		summarizeBy: sum
+		sourceColumn: time_end_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: 01e86d18-6d79-4f6b-b7c8-c194833c63b5
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column cip13
+		dataType: string
+		lineageTag: 2aa588a5-90cb-45e5-89d5-c5671d1bf862
+		sourceLineageTag: cip13
+		summarizeBy: none
+		sourceColumn: cip13
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_cis_level
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 45a7a223-b6da-49f1-ae62-364a61d94914
+		sourceLineageTag: is_cis_level
+		summarizeBy: none
+		sourceColumn: is_cis_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_debut
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 84713b38-80ae-4dba-a43f-1f226afed6a6
+		sourceLineageTag: date_debut
+		summarizeBy: none
+		sourceColumn: date_debut
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_fin
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f84815aa-92d9-4998-9840-3f24777b6784
+		sourceLineageTag: date_fin
+		summarizeBy: none
+		sourceColumn: date_fin
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_mise_a_jour
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f6a54479-f618-4f20-89c1-305833eb72cf
+		sourceLineageTag: date_mise_a_jour
+		summarizeBy: none
+		sourceColumn: date_mise_a_jour
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_statut
+		dataType: int64
+		formatString: 0
+		lineageTag: c4f139c2-5b64-492e-bcb7-7ef27de51e20
+		sourceLineageTag: code_statut
+		summarizeBy: sum
+		sourceColumn: code_statut
+
+		annotation SummarizationSetBy = Automatic
+
+	column classification
+		dataType: string
+		lineageTag: bdcf6d13-d117-47e5-827e-c4bc14f73414
+		sourceLineageTag: classification
+		summarizeBy: none
+		sourceColumn: classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8937db47-d2b5-4340-bd7a-6be353f13f0b
+		sourceLineageTag: is_active
+		summarizeBy: none
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 0dd93ddf-83db-40f1-af47-ac4fd44a3646
+		sourceLineageTag: duration_days
+		summarizeBy: sum
+		sourceColumn: duration_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_bucket
+		dataType: string
+		lineageTag: 827e2b57-d5cf-44e7-9aef-5f463d02fd0c
+		sourceLineageTag: duration_bucket
+		summarizeBy: none
+		sourceColumn: duration_bucket
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_since_update
+		dataType: int64
+		formatString: 0
+		lineageTag: d194873b-8c52-4455-944a-6143f82387d1
+		sourceLineageTag: days_since_update
+		summarizeBy: sum
+		sourceColumn: days_since_update
+
+		annotation SummarizationSetBy = Automatic
+
+	column remise_depassee
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 02a074ee-0c31-4a58-a095-f9b3e24e1168
+		sourceLineageTag: remise_depassee
+		summarizeBy: none
+		sourceColumn: remise_depassee
+
+		annotation SummarizationSetBy = Automatic
+
+	column lien_ansm
+		dataType: string
+		lineageTag: 74dd11d7-d4a2-4409-8b94-6d273dd7f87e
+		sourceLineageTag: lien_ansm
+		summarizeBy: none
+		sourceColumn: lien_ansm
+
+		annotation SummarizationSetBy = Automatic
+
+	column as_of_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 88e0c173-512e-4386-86f6-9928193f540b
+		sourceLineageTag: as_of_date
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 80b29983-0e01-48da-80ac-9492bfb69214
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 8e81eb49-3d2d-4645-960a-c4a7ccf06993
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_shortage = entity
+		mode: directLake
+		source
+			entityName: gold_fact_shortage
+			expressionSource: 'DirectLake - lh_health_analytics'
+

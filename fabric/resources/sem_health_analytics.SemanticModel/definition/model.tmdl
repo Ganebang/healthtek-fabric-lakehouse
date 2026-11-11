@@ -1,0 +1,35 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["DirectLake - lh_health_analytics"]
+
+annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit","TMDLView_Desktop","DaxQueryView_Desktop"]
+
+ref table gold_dim_atc
+ref table gold_dim_drug
+ref table gold_dim_generic_group
+ref table gold_dim_opinion_level
+ref table gold_dim_presentation
+ref table gold_dim_status
+ref table gold_dim_substance
+ref table gold_dim_time
+ref table gold_fact_composition
+ref table gold_fact_has_opinion
+ref table gold_fact_important_info
+ref table gold_fact_presentation_price
+ref table gold_fact_shortage
+ref table gold_kpi_generic_price_gap
+ref table gold_kpi_price_movement
+ref table gold_kpi_shortage_monthly
+ref table gold_kpi_shortage_risk_score
+ref table _Mesures
+ref table _dq_audit_log
+ref table _dq_quarantine
+

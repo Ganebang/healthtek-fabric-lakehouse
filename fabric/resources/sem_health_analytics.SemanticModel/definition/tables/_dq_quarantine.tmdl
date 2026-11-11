@@ -1,0 +1,74 @@
+table _dq_quarantine
+	lineageTag: dd798804-8b15-4032-82ab-c2ad7f183637
+	sourceLineageTag: [dbo].[_dq_quarantine]
+
+	column source_table
+		dataType: string
+		lineageTag: 17656963-cf17-440c-b706-847a1a1140bf
+		sourceLineageTag: source_table
+		summarizeBy: none
+		sourceColumn: source_table
+
+		annotation SummarizationSetBy = Automatic
+
+	column rule
+		dataType: string
+		lineageTag: 0b42865a-2820-4b56-be7a-e6c5efa08423
+		sourceLineageTag: rule
+		summarizeBy: none
+		sourceColumn: rule
+
+		annotation SummarizationSetBy = Automatic
+
+	column layer
+		dataType: string
+		lineageTag: dac2ffaa-b01b-48f1-ac43-1be719a3c657
+		sourceLineageTag: layer
+		summarizeBy: none
+		sourceColumn: layer
+
+		annotation SummarizationSetBy = Automatic
+
+	column pipeline_run_id
+		dataType: string
+		lineageTag: e4d27b14-20f0-4702-8e31-57bacf485886
+		sourceLineageTag: pipeline_run_id
+		summarizeBy: none
+		sourceColumn: pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_hash
+		dataType: string
+		lineageTag: 20150cfa-dfff-41df-ab7f-fa59d7d06d3e
+		sourceLineageTag: row_hash
+		summarizeBy: none
+		sourceColumn: row_hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_json
+		dataType: string
+		lineageTag: 7d975e6c-3ab2-455a-ab75-cfacd286b343
+		sourceLineageTag: row_json
+		summarizeBy: none
+		sourceColumn: row_json
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarantined_at
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: 859efc0e-0632-4dde-85dc-4bb53bf2de8b
+		sourceLineageTag: quarantined_at
+		summarizeBy: none
+		sourceColumn: quarantined_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _dq_quarantine = entity
+		mode: directLake
+		source
+			entityName: _dq_quarantine
+			expressionSource: 'DirectLake - lh_health_analytics'
+

@@ -1,0 +1,142 @@
+table gold_dim_presentation
+	lineageTag: 9c51f989-6c4b-4e8a-991c-2181892354ee
+	sourceLineageTag: [dbo].[gold_dim_presentation]
+
+	column cip13
+		dataType: string
+		lineageTag: be43d8d5-12b0-4624-a13f-33142d5195d6
+		sourceLineageTag: cip13
+		summarizeBy: none
+		sourceColumn: cip13
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: 86db0e80-3a1a-41cd-8df7-b43b7ce3f7aa
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column cip7
+		dataType: string
+		lineageTag: 6c2ff638-2d7e-4b94-8267-c72e2e5c9822
+		sourceLineageTag: cip7
+		summarizeBy: none
+		sourceColumn: cip7
+
+		annotation SummarizationSetBy = Automatic
+
+	column libelle_presentation
+		dataType: string
+		lineageTag: ead75264-7b9c-4fc3-9bad-6dbddb0aaef8
+		sourceLineageTag: libelle_presentation
+		summarizeBy: none
+		sourceColumn: libelle_presentation
+
+		annotation SummarizationSetBy = Automatic
+
+	column statut_administratif
+		dataType: string
+		lineageTag: a36f21f1-a1d6-47bc-980b-a71aac6ce84b
+		sourceLineageTag: statut_administratif
+		summarizeBy: none
+		sourceColumn: statut_administratif
+
+		annotation SummarizationSetBy = Automatic
+
+	column etat_commercialisation
+		dataType: string
+		lineageTag: 8840b987-2d77-4cae-94e3-eee828b77257
+		sourceLineageTag: etat_commercialisation
+		summarizeBy: none
+		sourceColumn: etat_commercialisation
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_commercialisee
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d829b35b-a5ea-4b15-8d03-e9b5d169f547
+		sourceLineageTag: is_commercialisee
+		summarizeBy: none
+		sourceColumn: is_commercialisee
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_declaration_commercialisation
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 932d9bb4-560f-429f-a941-0a61a5457479
+		sourceLineageTag: date_declaration_commercialisation
+		summarizeBy: none
+		sourceColumn: date_declaration_commercialisation
+
+		annotation SummarizationSetBy = Automatic
+
+	column agrement_collectivites
+		dataType: string
+		lineageTag: 9ec2547e-588a-40b1-a814-f9a6fe4cf352
+		sourceLineageTag: agrement_collectivites
+		summarizeBy: none
+		sourceColumn: agrement_collectivites
+
+		annotation SummarizationSetBy = Automatic
+
+	column cip13_valid
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c1dafc7f-561c-4d40-845c-5948e91d5b2d
+		sourceLineageTag: cip13_valid
+		summarizeBy: none
+		sourceColumn: cip13_valid
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_inferred
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0c5b96f2-4c58-4a72-9844-ec72f22488aa
+		sourceLineageTag: is_inferred
+		summarizeBy: none
+		sourceColumn: is_inferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column presentation_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a32c71f-0e64-4f60-bd9d-c96995298d65
+		sourceLineageTag: presentation_sk
+		summarizeBy: sum
+		sourceColumn: presentation_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: de06d8c8-0aae-4919-940e-f8449b22a420
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 36ed2c1c-f3df-4423-b352-ffb15049d1c4
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_presentation = entity
+		mode: directLake
+		source
+			entityName: gold_dim_presentation
+			expressionSource: 'DirectLake - lh_health_analytics'
+

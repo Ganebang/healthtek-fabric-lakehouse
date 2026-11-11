@@ -1,0 +1,112 @@
+table gold_dim_atc
+	lineageTag: 3cb3bc6b-f796-467a-bf15-ada6b43a0afe
+	sourceLineageTag: [dbo].[gold_dim_atc]
+
+	column code_atc
+		dataType: string
+		lineageTag: 8ae2e26e-a50e-4e97-969e-da2476c33861
+		sourceLineageTag: code_atc
+		summarizeBy: none
+		sourceColumn: code_atc
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level1
+		dataType: string
+		lineageTag: 5eec1aa0-7e42-4130-85bf-2bf9109086fc
+		sourceLineageTag: atc_level1
+		summarizeBy: none
+		sourceColumn: atc_level1
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level2
+		dataType: string
+		lineageTag: 91fefd67-3fcf-4e14-b92b-7f396da228b7
+		sourceLineageTag: atc_level2
+		summarizeBy: none
+		sourceColumn: atc_level2
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level3
+		dataType: string
+		lineageTag: b613847a-93a4-4153-be8b-3b1495ba0fa1
+		sourceLineageTag: atc_level3
+		summarizeBy: none
+		sourceColumn: atc_level3
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level4
+		dataType: string
+		lineageTag: e085b751-740f-4f10-b92e-2b40fd75dbfe
+		sourceLineageTag: atc_level4
+		summarizeBy: none
+		sourceColumn: atc_level4
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level5
+		dataType: string
+		lineageTag: 2bbddcbf-0670-4aaa-9b75-77196dda01ac
+		sourceLineageTag: atc_level5
+		summarizeBy: none
+		sourceColumn: atc_level5
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level1_label
+		dataType: string
+		lineageTag: f1068444-213a-40bb-9fda-ed1e9369cdda
+		sourceLineageTag: atc_level1_label
+		summarizeBy: none
+		sourceColumn: atc_level1_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_depth
+		dataType: int64
+		formatString: 0
+		lineageTag: 8729edc0-0b1e-4f6a-a8ee-9571d200128a
+		sourceLineageTag: atc_depth
+		summarizeBy: sum
+		sourceColumn: atc_depth
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 5140b846-393a-4549-912d-ab2d26daad03
+		sourceLineageTag: atc_sk
+		summarizeBy: sum
+		sourceColumn: atc_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8959f45a-e358-43dc-be94-df21e3c88403
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 0519eba9-ab29-4df5-af58-530e30a689a1
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_atc = entity
+		mode: directLake
+		source
+			entityName: gold_dim_atc
+			expressionSource: 'DirectLake - lh_health_analytics'
+

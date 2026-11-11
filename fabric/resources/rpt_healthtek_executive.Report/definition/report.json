@@ -1,0 +1,120 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.4.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "Fluent2-CY26SU11",
+      "reportVersionAtImport": {
+        "visual": "2.15.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "HealthTek_Lavender4116009737780646.json",
+      "reportVersionAtImport": {
+        "visual": "2.15.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          },
+          "visible": {
+            "expr": {
+              "Literal": {
+                "Value": "true"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "Fluent2-CY26SU11",
+          "path": "BaseThemes/Fluent2-CY26SU11.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "HealthTek_Lavender4116009737780646.json",
+          "path": "HealthTek_Lavender4116009737780646.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "ht_logo.svg",
+          "path": "ht_logo.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ht_icon_boxes.svg",
+          "path": "ht_icon_boxes.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ht_icon_pills.svg",
+          "path": "ht_icon_pills.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ht_icon_shield.svg",
+          "path": "ht_icon_shield.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ht_icon_euro.svg",
+          "path": "ht_icon_euro.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ht_icon_alert.svg",
+          "path": "ht_icon_alert.svg",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

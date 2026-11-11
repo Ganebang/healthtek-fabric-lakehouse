@@ -1,0 +1,425 @@
+table _Mesures
+	lineageTag: a1000001-0000-4000-8000-000000000001
+
+	measure 'Shortage Events' = COUNTROWS ( gold_fact_shortage )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: a1000002-0000-4000-8000-000000000001
+
+	measure 'Active Shortages' = CALCULATE ( [Shortage Events], gold_fact_shortage[is_active] = TRUE () )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 8d7ad870-e151-5fcb-93e0-a85df7c34de1
+
+	measure 'Drugs Affected' = DISTINCTCOUNT ( gold_fact_shortage[cis_code] )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 13b749eb-c7c8-5c13-851f-77b8e8d468a3
+
+	measure 'Active Drugs Affected' = CALCULATE ( [Drugs Affected], gold_fact_shortage[is_active] = TRUE () )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 2118a5b5-f899-5aa0-8b19-4c5875b89008
+
+	measure 'Marketed Drugs' = CALCULATE ( COUNTROWS ( gold_dim_drug ), gold_dim_drug[is_commercialisee] = TRUE (), gold_dim_drug[is_inferred] = FALSE (), gold_dim_drug[drug_sk] <> -1 )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 0e2a9ce5-3e99-5f98-9a00-8a05752409bc
+
+	measure 'Shortage Rate %' = DIVIDE ( [Active Drugs Affected], [Marketed Drugs], BLANK () )
+		formatString: 0.0%
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: b8134b84-9565-5934-8a4d-8ebbb33ffe41
+
+	measure 'Avg Duration (days)' = CALCULATE ( AVERAGE ( gold_fact_shortage[duration_days] ), KEEPFILTERS ( gold_fact_shortage[duration_days] >= 0 ) )
+		formatString: #,0.0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: d19fdec5-05f4-5482-964c-cb55c6fa9e3d
+
+	measure 'Median Duration (days)' = CALCULATE ( MEDIAN ( gold_fact_shortage[duration_days] ), KEEPFILTERS ( gold_fact_shortage[duration_days] >= 0 ) )
+		formatString: #,0.0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 826f5c74-5f80-5029-ad29-5f3f16a4abf0
+
+	measure 'P90 Duration (days)' = CALCULATE ( PERCENTILE.INC ( gold_fact_shortage[duration_days], 0.9 ), KEEPFILTERS ( gold_fact_shortage[duration_days] >= 0 ) )
+		formatString: #,0.0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: ba26ccb9-53c6-50e9-9fc6-7b373ddd1a1e
+
+	measure 'Long Shortages (>365 d)' = CALCULATE ( [Shortage Events], gold_fact_shortage[duration_bucket] = "> 365 jours" )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: c303f830-2164-5ccb-a09b-c9266a400971
+
+	measure 'Stale Shortage Records' = CALCULATE ( [Shortage Events], gold_fact_shortage[days_since_update] > 90 )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 75f6bd61-56bb-531f-b545-b4ae157fbabf
+
+	measure 'Overdue Return Dates' = CALCULATE ( [Shortage Events], gold_fact_shortage[remise_depassee] = TRUE () )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: afdbae7f-b5ff-549b-bbfe-664a125ff6b4
+
+	measure 'MITM Active Drugs Affected' = CALCULATE ( [Active Drugs Affected], gold_dim_drug[is_mitm] = TRUE () )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: aa4e51be-0a0c-5045-8e56-77483aae7fe7
+
+	measure 'Shortages Ended (end date)' = CALCULATE ( [Shortage Events], USERELATIONSHIP ( gold_fact_shortage[time_end_sk], gold_dim_time[time_sk] ) )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 143ca030-36bb-5f5b-8821-2bd0753d1949
+
+	measure 'Risk Drugs' = COUNTROWS ( gold_kpi_shortage_risk_score )
+		formatString: #,0
+		displayFolder: 02 - Score de risque
+		lineageTag: 15544067-0861-549a-bcc1-f7b24bbc14d0
+
+	measure 'Critical Drugs' = CALCULATE ( [Risk Drugs], gold_kpi_shortage_risk_score[risk_category] = "Critique" )
+		formatString: #,0
+		displayFolder: 02 - Score de risque
+		lineageTag: ec2b1a72-116d-5846-b208-abeabd42948e
+
+	measure 'High Drugs' = CALCULATE ( [Risk Drugs], gold_kpi_shortage_risk_score[risk_category] = "Élevé" )
+		formatString: #,0
+		displayFolder: 02 - Score de risque
+		lineageTag: cacf5e1f-2a19-5802-b870-bd6c5d664178
+
+	measure 'Avg Risk Score' = AVERAGE ( gold_kpi_shortage_risk_score[risk_score] )
+		formatString: #,0.0
+		displayFolder: 02 - Score de risque
+		lineageTag: 7d43481b-2278-5fd4-a42c-d2d5d509de61
+
+	measure 'Max Risk Score' = MAX ( gold_kpi_shortage_risk_score[risk_score] )
+		formatString: #,0.0
+		displayFolder: 02 - Score de risque
+		lineageTag: f59d0883-0453-56e8-95cd-6df2de5cfa39
+
+	measure 'No Alternative Active Drugs' = CALCULATE ( [Risk Drugs], gold_kpi_shortage_risk_score[no_alternative] = TRUE (), gold_kpi_shortage_risk_score[active_shortages] > 0 )
+		formatString: #,0
+		displayFolder: 02 - Score de risque
+		lineageTag: 795f10dc-5bd3-59fd-9766-2e3830b1cd6e
+
+	measure 'No Alternative %' = DIVIDE ( [No Alternative Active Drugs], CALCULATE ( [Risk Drugs], gold_kpi_shortage_risk_score[active_shortages] > 0 ), BLANK () )
+		formatString: 0.0%
+		displayFolder: 02 - Score de risque
+		lineageTag: 4e6e4801-3e84-509f-86ff-764466919cca
+
+	measure 'Latest Snapshot' = MAX ( gold_fact_presentation_price[snapshot_date] )
+		formatString: yyyy-mm-dd
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 8aecaddd-2d2e-5f7c-bb0c-a9d6880c2093
+
+	measure 'Priced Boxes (latest)' = VAR d = [Latest Snapshot] RETURN CALCULATE ( COUNTROWS ( gold_fact_presentation_price ), gold_fact_presentation_price[snapshot_date] = d, gold_fact_presentation_price[has_price] = TRUE () )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 73d4f99e-4857-52f0-bb68-765fb2cc2354
+
+	measure 'Boxes (latest)' = VAR d = [Latest Snapshot] RETURN CALCULATE ( COUNTROWS ( gold_fact_presentation_price ), gold_fact_presentation_price[snapshot_date] = d )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: cf942d53-fd9c-5353-b656-6a689723b8ff
+
+	measure 'Reimbursed Boxes (latest)' = VAR d = [Latest Snapshot] RETURN CALCULATE ( COUNTROWS ( gold_fact_presentation_price ), gold_fact_presentation_price[snapshot_date] = d, gold_fact_presentation_price[is_reimbursed] = TRUE () )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: c572bd99-a103-5987-b6c4-52a77215ae36
+
+	measure 'Reimbursed Share %' = DIVIDE ( [Reimbursed Boxes (latest)], [Boxes (latest)], BLANK () )
+		formatString: 0.0%
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 1c2963d5-df70-50a0-b692-5292faf1271c
+
+	measure 'Avg Price (EUR)' = VAR d = [Latest Snapshot] RETURN CALCULATE ( AVERAGE ( gold_fact_presentation_price[prix_hors_honoraires] ), gold_fact_presentation_price[snapshot_date] = d, gold_fact_presentation_price[has_price] = TRUE () )
+		formatString: #,0.00 "€"
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 93f7caa1-92e9-599c-a1d7-96a22680c46e
+
+	measure 'Avg Price Incl. Fees (EUR)' = VAR d = [Latest Snapshot] RETURN CALCULATE ( AVERAGE ( gold_fact_presentation_price[prix_avec_honoraires] ), gold_fact_presentation_price[snapshot_date] = d, gold_fact_presentation_price[has_price] = TRUE () )
+		formatString: #,0.00 "€"
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: db6dc50c-6f30-5593-a6bf-84ec5cabbf82
+
+	measure 'Price Drops' = CALCULATE ( COUNTROWS ( gold_kpi_price_movement ), gold_kpi_price_movement[movement] = "Baisse" )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 11db32cd-5940-5ad7-bfd7-1218a6df00f3
+
+	measure 'Price Rises' = CALCULATE ( COUNTROWS ( gold_kpi_price_movement ), gold_kpi_price_movement[movement] = "Hausse" )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 1fbad332-053d-5a83-b199-a087597597be
+
+	measure 'Comparable Prices' = [Price Drops] + [Price Rises] + CALCULATE ( COUNTROWS ( gold_kpi_price_movement ), gold_kpi_price_movement[movement] = "Stable" )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 28fd7e53-39b3-59cb-a560-9614b45a6e9a
+
+	measure 'Price Drops %' = DIVIDE ( [Price Drops], [Comparable Prices], BLANK () )
+		formatString: 0.0%
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 033ccc33-7767-5c83-b532-f6e67801ae4f
+
+	measure 'Price Rises %' = DIVIDE ( [Price Rises], [Comparable Prices], BLANK () )
+		formatString: 0.0%
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: ebee0317-25a9-57e9-82ed-78684e9fe938
+
+	measure 'Groups Compared' = COUNT ( gold_kpi_generic_price_gap[gap_pct] )
+		formatString: #,0
+		displayFolder: 04 - Génériques
+		lineageTag: cdcb6ae3-7977-59d6-8a6a-dcd0d9aa352f
+
+	measure 'Avg Princeps Price (EUR)' = AVERAGE ( gold_kpi_generic_price_gap[avg_princeps_price] )
+		formatString: #,0.00 "€"
+		displayFolder: 04 - Génériques
+		lineageTag: cb9677c7-dd81-54d1-8516-b180d5a2eaed
+
+	measure 'Avg Generic Price (EUR)' = AVERAGE ( gold_kpi_generic_price_gap[avg_generic_price] )
+		formatString: #,0.00 "€"
+		displayFolder: 04 - Génériques
+		lineageTag: 567501b0-f713-52eb-9709-63725f693fbe
+
+	measure 'Avg Generic Gap %' = VAR _Princeps = [Avg Princeps Price (EUR)] VAR _Generic  = [Avg Generic Price (EUR)] RETURN IF ( ISBLANK ( _Princeps ) || ISBLANK ( _Generic ), BLANK (), DIVIDE ( _Princeps - _Generic, _Princeps, BLANK () ) )
+		formatString: 0.0%
+		displayFolder: 04 - Génériques
+		lineageTag: 57d0b976-7e32-566e-884e-7a282237982b
+
+	measure 'Generic Drugs' = CALCULATE ( COUNTROWS ( gold_dim_drug ), gold_dim_drug[is_generic] = TRUE (), gold_dim_drug[is_inferred] = FALSE () )
+		formatString: #,0
+		displayFolder: 04 - Génériques
+		lineageTag: afcebd63-2e5b-5947-9637-5a2d6079d28b
+
+	measure 'Princeps Drugs' = CALCULATE ( COUNTROWS ( gold_dim_drug ), gold_dim_drug[is_princeps] = TRUE (), gold_dim_drug[is_inferred] = FALSE () )
+		formatString: #,0
+		displayFolder: 04 - Génériques
+		lineageTag: a107182f-a74f-52ba-a50e-28d89aa76a76
+
+	measure 'SMR Drugs (latest)' = CALCULATE ( DISTINCTCOUNT ( gold_fact_has_opinion[cis_code] ), gold_fact_has_opinion[opinion_type] = "SMR", gold_fact_has_opinion[is_latest_avis] = TRUE () )
+		formatString: #,0
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: 5287b80a-d3f1-5a2a-be12-60f65083713c
+
+	measure 'SMR Important (latest)' = CALCULATE ( DISTINCTCOUNT ( gold_fact_has_opinion[cis_code] ), gold_fact_has_opinion[opinion_type] = "SMR", gold_fact_has_opinion[is_latest_avis] = TRUE (), gold_fact_has_opinion[level_rank] = 4 )
+		formatString: #,0
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: 1df4c346-3318-5eb6-a6ef-8d4c5d16e9cf
+
+	measure 'SMR Important %' = DIVIDE ( [SMR Important (latest)], [SMR Drugs (latest)], BLANK () )
+		formatString: 0.0%
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: e953f310-1786-52c9-9b80-7dc8b5cf140e
+
+	measure 'SMR Insufficient (latest)' = CALCULATE ( DISTINCTCOUNT ( gold_fact_has_opinion[cis_code] ), gold_fact_has_opinion[opinion_type] = "SMR", gold_fact_has_opinion[is_latest_avis] = TRUE (), gold_fact_has_opinion[level_rank] = 1 )
+		formatString: #,0
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: 6f1d2af4-156b-5931-8b3e-4ffe8a8dc359
+
+	measure 'Active Safety Notices' = CALCULATE ( COUNTROWS ( gold_fact_important_info ), gold_fact_important_info[is_active] = TRUE () )
+		formatString: #,0
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: 8a994f80-7a53-52f3-9e10-6612c85391f1
+
+	measure 'Drugs With Active Notice' = CALCULATE ( DISTINCTCOUNT ( gold_fact_important_info[cis_code] ), gold_fact_important_info[is_active] = TRUE () )
+		formatString: #,0
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: f8fb4a16-8922-5b7e-8ad6-caa087283dff
+
+	measure 'Notices Ending In 30 Days' = CALCULATE ( COUNTROWS ( gold_fact_important_info ), gold_fact_important_info[is_active] = TRUE (), gold_fact_important_info[days_remaining] <= 30 )
+		formatString: #,0
+		displayFolder: 05 - Avis HAS et sécurité
+		lineageTag: 486d3212-b06a-54c4-9c8e-d0549b3fe8ac
+
+	measure 'Active Substance Lines' = CALCULATE ( COUNTROWS ( gold_fact_composition ), gold_fact_composition[is_active_substance] = TRUE () )
+		formatString: #,0
+		displayFolder: 06 - Substances
+		lineageTag: 919cf684-101c-5f65-9451-0a7bf072d2dd
+
+	measure 'Drugs Per Substance' = CALCULATE ( DISTINCTCOUNT ( gold_fact_composition[cis_code] ), gold_fact_composition[is_active_substance] = TRUE () )
+		formatString: #,0
+		displayFolder: 06 - Substances
+		lineageTag: 5ec0de7c-2d12-5ee2-b967-1ab185517e59
+
+	measure 'Distinct Active Substances' = CALCULATE ( DISTINCTCOUNT ( gold_fact_composition[substance_sk] ), gold_fact_composition[is_active_substance] = TRUE () )
+		formatString: #,0
+		displayFolder: 06 - Substances
+		lineageTag: 6c5efc7d-1095-5128-af03-b3b516d48e6b
+
+	measure 'Inferred Drugs' = CALCULATE ( COUNTROWS ( gold_dim_drug ), gold_dim_drug[is_inferred] = TRUE () )
+		formatString: #,0
+		displayFolder: 07 - Qualité du modèle
+		lineageTag: 3617ab3c-cae7-543e-8be9-4d5aa12b03b7
+
+	measure 'Inferred Drugs %' = DIVIDE ( [Inferred Drugs], COUNTROWS ( gold_dim_drug ), BLANK () )
+		formatString: 0.0%
+		displayFolder: 07 - Qualité du modèle
+		lineageTag: 188d6b50-e337-56e7-8056-c1bec6f9a7b9
+
+	/// Durée moyenne (jours) des signalements encore actifs (rupture ou tension).
+	measure 'Active Avg Duration (days)' = CALCULATE ( [Avg Duration (days)], gold_fact_shortage[is_active] = TRUE () )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 0f4263a1-df5f-47f6-a1e1-9306dc8c9b9b
+
+	/// Durée médiane (jours) des signalements actifs, robuste aux valeurs extrêmes.
+	measure 'Active Median Duration (days)' = CALCULATE ( [Median Duration (days)], gold_fact_shortage[is_active] = TRUE () )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: de43b128-8502-4962-99e3-3856876d0abd
+
+	/// Libellé de carte KPI : durée moyenne active suffixée de « j ».
+	measure 'Active Avg Duration Label' = VAR _d = [Active Avg Duration (days)] RETURN IF ( ISBLANK ( _d ), "–", FORMAT ( _d, "#,0" ) & " j" )
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: a03bc48b-cd97-4b25-b14a-29a150371b0b
+
+	/// Durée maximale (jours) parmi les signalements actifs ; sert au Top 10 des ruptures les plus longues.
+	measure 'Max Active Duration (days)' = CALCULATE ( MAX ( gold_fact_shortage[duration_days] ), gold_fact_shortage[is_active] = TRUE () )
+		formatString: #,0 "j"
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 85999203-765c-42ea-be43-5587d5635b08
+
+	/// Signalements débutés sur la période (relation active date_debut → calendrier).
+	measure 'Shortages Started' = [Shortage Events]
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 2a90915b-dd2d-4e4c-8a7c-dd74407b6825
+
+	/// Sous-titre dynamique de la carte durée.
+	measure 'Duration Caption' = "Durée moyenne (médiane " & FORMAT ( [Active Median Duration (days)], "#,0" ) & " j)"
+		displayFolder: 09 - Libellés & navigation
+		lineageTag: 569628ef-b3f8-497c-b42b-735f806d8c21
+
+	/// Pied de page : date de l'instantané BDPM affiché.
+	measure 'Snapshot Caption' = VAR _d = MAX ( gold_fact_shortage[as_of_date] ) RETURN "Données réelles BDPM · ANSM — instantané du " & FORMAT ( _d, "dd/mm/yyyy" )
+		displayFolder: 09 - Libellés & navigation
+		lineageTag: 7ddfc6b8-e02b-475d-bf84-296e37d3046d
+
+	measure 'Report Title Ruptures' = "Suivi des ruptures et tensions d'approvisionnement"
+		displayFolder: 09 - Libellés & navigation
+		lineageTag: 9916a2dc-9ae6-4ee4-90a8-8282cd9daacf
+
+	/// Nombre de contrôles qualité effectivement évalués.
+	measure 'DQ Checks Run' = CALCULATE ( COUNTROWS ( '_dq_audit_log' ), '_dq_audit_log'[skipped] = FALSE () )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: b0923179-b7d4-4c93-a8af-83de11d69bed
+
+	measure 'DQ Checks Passed' = CALCULATE ( COUNTROWS ( '_dq_audit_log' ), '_dq_audit_log'[skipped] = FALSE (), '_dq_audit_log'[passed] = TRUE () )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: 5175379c-8e62-4069-a6ae-c1e820d599fd
+
+	/// Taux de contrôles qualité réussis.
+	measure 'DQ Pass Rate %' = DIVIDE ( [DQ Checks Passed], [DQ Checks Run], BLANK () )
+		formatString: 0.0%
+		displayFolder: 08 - Qualité des données
+		lineageTag: 8626ced4-ba64-4af4-b554-84debf6629ce
+
+	/// Contrôles critiques en échec (bloquent la porte qualité si fail_fast).
+	measure 'DQ Critical Failures' = CALCULATE ( COUNTROWS ( '_dq_audit_log' ), '_dq_audit_log'[skipped] = FALSE (), '_dq_audit_log'[passed] = FALSE (), '_dq_audit_log'[severity] = "critical" )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: a726d376-5001-4c43-8086-b93c2776486c
+
+	/// Avertissements tolérés.
+	measure 'DQ Warnings' = CALCULATE ( COUNTROWS ( '_dq_audit_log' ), '_dq_audit_log'[skipped] = FALSE (), '_dq_audit_log'[passed] = FALSE (), '_dq_audit_log'[severity] = "warning" )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: f22cd614-6317-46f1-9f0c-a928f3bfa658
+
+	/// Somme des lignes en infraction, toutes règles confondues.
+	measure 'DQ Failed Rows' = SUM ( '_dq_audit_log'[failures] )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: ff6f13b5-886f-4f9a-8d87-cd020b1f4c9e
+
+	measure 'DQ Last Check' = MAX ( '_dq_audit_log'[checked_at] )
+		formatString: dd/mm/yyyy hh:nn
+		displayFolder: 08 - Qualité des données
+		lineageTag: 72d42635-1666-436d-803c-c126b668a809
+
+	/// Identifiant du dernier run pipeline ayant journalisé des contrôles.
+	measure 'DQ Last Run Id' = VAR _last = CALCULATE ( MAX ( '_dq_audit_log'[checked_at] ), REMOVEFILTERS ( '_dq_audit_log' ) ) RETURN CALCULATE ( MAX ( '_dq_audit_log'[pipeline_run_id] ), REMOVEFILTERS ( '_dq_audit_log' ), '_dq_audit_log'[checked_at] = _last )
+		displayFolder: 08 - Qualité des données
+		lineageTag: 387c7935-e05c-4186-b9c6-9791331f870b
+
+	/// Taux de réussite des contrôles du dernier run.
+	measure 'DQ Pass Rate % (last run)' = VAR _id = [DQ Last Run Id] RETURN CALCULATE ( [DQ Pass Rate %], '_dq_audit_log'[pipeline_run_id] = _id )
+		formatString: 0.0%
+		displayFolder: 08 - Qualité des données
+		lineageTag: 5a64296b-524e-4d67-a1f6-757ff25e5126
+
+	measure 'DQ Critical Failures (last run)' = VAR _id = [DQ Last Run Id] RETURN CALCULATE ( [DQ Critical Failures], '_dq_audit_log'[pipeline_run_id] = _id ) + 0
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: 950a45b0-9b2b-44e8-8ef4-336733f26f98
+
+	/// Lignes écartées et conservées en quarantaine (aucune perte silencieuse).
+	measure 'Quarantined Rows' = COUNTROWS ( '_dq_quarantine' )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: f5050590-28ca-453d-8560-b06892ed8177
+
+	measure 'Avg Generic Gap Label' = VAR _g = [Avg Generic Gap %] RETURN IF ( ISBLANK ( _g ), "–", FORMAT ( _g, "0.0 %" ) )
+		displayFolder: 09 - Libellés & navigation
+		lineageTag: cfac943b-9e18-49fc-a8d1-dd6f0707a8dc
+
+	/// Signalements débutés, en excluant les dates de début futures (saisies anticipées).
+	measure 'Shortages Started (to date)' = CALCULATE ( [Shortage Events], KEEPFILTERS ( gold_dim_time[date_value] <= TODAY () ) )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: 9453752a-2c89-4e7d-b6d5-4eef3ce36b10
+
+	/// Durée maximale active limitée aux 10 spécialités les plus touchées (visuel Top 10).
+	measure 'Top10 Active Duration' = VAR _d = [Max Active Duration (days)] VAR _t = ADDCOLUMNS ( ALLSELECTED ( gold_dim_drug[denomination] ), "@d", [Max Active Duration (days)] ) VAR _r = ROWNUMBER ( _t, ORDERBY ( [@d], DESC, gold_dim_drug[denomination], ASC ) ) RETURN IF ( NOT ISBLANK ( _d ) && _r <= 10, _d )
+		formatString: #,0 "j"
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: c68fceaf-7873-464f-b2c5-49a1e2dae59d
+
+	/// Écart princeps/générique limité aux 10 groupes les plus coûteux.
+	measure 'Top10 Generic Gap %' = VAR _g = [Avg Generic Gap %] VAR _t = ADDCOLUMNS ( ALLSELECTED ( gold_kpi_generic_price_gap[libelle_groupe] ), "@g", [Avg Generic Gap %] ) VAR _r = ROWNUMBER ( _t, ORDERBY ( [@g], DESC, gold_kpi_generic_price_gap[libelle_groupe], ASC ) ) RETURN IF ( NOT ISBLANK ( _g ) && _r <= 10, _g )
+		formatString: 0.0%
+		displayFolder: 04 - Génériques
+		lineageTag: 83183c11-06a5-4dbd-b0d5-0a69fbf9fb5d
+
+	/// Présentations comparées entre les deux derniers instantanés de prix.
+	measure 'Price Movements' = COUNTROWS ( gold_kpi_price_movement )
+		formatString: #,0
+		displayFolder: 03 - Prix et remboursement
+		lineageTag: 823d74b5-8130-40e1-aad1-46380111df27
+
+	/// Contrôles en échec (critiques + avertissements).
+	measure 'DQ Failed Checks' = CALCULATE ( COUNTROWS ( '_dq_audit_log' ), '_dq_audit_log'[skipped] = FALSE (), '_dq_audit_log'[passed] = FALSE () )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: 3d76c0bb-6f45-4c20-9228-cb3161e8192e
+
+	measure 'DQ Failed Rows (failed checks)' = CALCULATE ( SUM ( '_dq_audit_log'[failures] ), '_dq_audit_log'[passed] = FALSE () )
+		formatString: #,0
+		displayFolder: 08 - Qualité des données
+		lineageTag: 9d0cd54a-c926-4a8b-9407-d5953413430b
+
+	/// Part des médicaments en rupture active qui sont d'intérêt thérapeutique majeur.
+	measure 'Active Drugs Affected (MITM %)' = DIVIDE ( [MITM Active Drugs Affected], [Active Drugs Affected], BLANK () )
+		formatString: 0.0%
+		displayFolder: 02 - Score de risque
+		lineageTag: 51c03584-bef6-4d14-b8a7-b59678b87030
+
+	/// Signalements débutés sur les 36 derniers mois (hors dates futures) : axe trimestriel lisible.
+	measure 'Shortages Started (last 3 years)' = CALCULATE ( [Shortage Events], KEEPFILTERS ( gold_dim_time[date_value] <= TODAY () && gold_dim_time[date_value] > EDATE ( TODAY (), -36 ) ) )
+		formatString: #,0
+		displayFolder: 01 - Suivi des ruptures
+		lineageTag: a5db2923-53eb-4f7a-80b3-fb72787cc08e
+
+	column _Dummy
+		dataType: int64
+		isHidden
+		lineageTag: a1000003-0000-4000-8000-000000000001
+		summarizeBy: none
+		sourceColumn: [Value]
+
+	partition _Mesures = calculated
+		mode: import
+		source = { 0 }
+

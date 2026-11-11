@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDashboard",
+    "displayName": "rt_dash_hospital_shortages",
+    "description": "rt_dash_hospital_shortages"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "45daee0a-32e1-b1af-4082-366ab1b66145"
+  }
+}

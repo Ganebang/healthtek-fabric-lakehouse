@@ -1,0 +1,22 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "ed678bf9-5d76-4fc0-bd12-165a0ead4224",
+        "clusterUri": "",
+        "type": "Fabric",
+        "databaseItemId": "9c7ab641-ccf1-b494-4b4f-97f4173bd3c8"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "a3d7e61a-3231-4c7b-a7df-b0b88a1bb823",
+        "content": "// === BLOC 1 : Creation de la table & politiques temps reel ===\n.create table pharmacy_shortage_events (\n    event_time: datetime,\n    hospital_id: string,\n    region: string,\n    cis_code: string,\n    cip13: string,\n    stock_level: int,\n    alert_severity: string\n)\n\n.alter table pharmacy_shortage_events policy ingestionbatching '{\"MaximumBatchingTimeSpan\": \"00:00:10\", \"MaximumNumberOfItems\": 500, \"MaximumRawDataSizeMB\": 100}'\n\n.alter table pharmacy_shortage_events policy retention '{\"SoftDeletePeriod\": \"365.00:00:00\", \"Recoverability\": \"Enabled\"}'\n\n.alter table pharmacy_shortage_events policy caching hot = 30d\n\n// === BLOC 2 : Simulation d'evenements streaming (.ingest inline) ===\n.ingest inline into table pharmacy_shortage_events <|\n2026-11-10T02:05:00Z,CHU_LYON,Auvergne-Rhone-Alpes,60234100,3400935955838,0,CRITICAL\n2026-11-10T02:12:00Z,APHP_PARIS,Ile-de-France,60234100,3400935955838,2,WARNING\n2026-11-10T02:18:00Z,CHU_TOULOUSE,Occitanie,60485234,3400930001234,0,CRITICAL\n2026-11-10T02:25:00Z,APHP_PARIS,Ile-de-France,60234100,3400935955838,0,CRITICAL\n2026-11-10T02:42:00Z,CHU_LILLE,Hauts-de-France,60234100,3400935955838,1,WARNING\n2026-11-10T03:05:00Z,CHU_LYON,Auvergne-Rhone-Alpes,60485234,3400930001234,0,CRITICAL\n\n// === BLOC 3A : Agregation horaire avec bin() ===\npharmacy_shortage_events\n| where alert_severity == \"CRITICAL\"\n| summarize critical_alerts = count(), hospitals = dcount(hospital_id) by bin(event_time, 1h), region\n| order by event_time desc\n\n// === BLOC 3B : Serie temporelle continue (make-series) + Graphique ===\npharmacy_shortage_events\n| make-series total_events = count() default = 0\n    on event_time from datetime(2026-11-10T02:00:00Z) to datetime(2026-11-10T04:00:00Z) step 15m\n    by alert_severity\n| render timechart\n\n// === BLOC 4 : Enrichissement Temps Reel via OneLake Shortcut (gold_dim_drug) ===\npharmacy_shortage_events\n| where event_time > ago(24h) and alert_severity == \"CRITICAL\"\n| join kind=leftouter (\n    gold_dim_drug | project cis_code, denomination, is_mitm, substance_active_primary\n) on cis_code\n| project event_time, hospital_id, region, cis_code, denomination, is_mitm, substance_active_primary, stock_level\n| order by event_time desc\n",
+        "title": "Tab",
+        "dataSourceId": "ed678bf9-5d76-4fc0-bd12-165a0ead4224"
+      }
+    ],
+    "querysetType": "Standalone"
+  }
+}

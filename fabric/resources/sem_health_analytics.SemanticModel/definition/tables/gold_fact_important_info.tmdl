@@ -1,0 +1,164 @@
+table gold_fact_important_info
+	lineageTag: 34f9177b-91c7-46d5-aeef-5db619f9c59d
+	sourceLineageTag: [dbo].[gold_fact_important_info]
+
+	column info_key
+		dataType: string
+		lineageTag: fb24fe64-e06c-48b3-a465-d62b4c730c6e
+		sourceLineageTag: info_key
+		summarizeBy: none
+		sourceColumn: info_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: b9fc5d5d-37b5-44ce-9b3d-d3e446117767
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 48f627c2-adfa-44b3-98e9-951b7f1b8663
+		sourceLineageTag: time_sk
+		summarizeBy: sum
+		sourceColumn: time_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_end_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 725c46e5-f869-49e0-bab2-46b06244bbcf
+		sourceLineageTag: time_end_sk
+		summarizeBy: sum
+		sourceColumn: time_end_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: 97b0ca2f-3940-48ff-b751-0c86802bf251
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column info_type
+		dataType: string
+		lineageTag: c3dbd27f-86b7-4da1-b55a-2d2c4115eb47
+		sourceLineageTag: info_type
+		summarizeBy: none
+		sourceColumn: info_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column info_title
+		dataType: string
+		lineageTag: c26d2106-7f43-419d-ac7e-5ac7acf0d605
+		sourceLineageTag: info_title
+		summarizeBy: none
+		sourceColumn: info_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column info_url
+		dataType: string
+		lineageTag: f5004d21-d5d8-4e25-98ad-935d36f4a31a
+		sourceLineageTag: info_url
+		summarizeBy: none
+		sourceColumn: info_url
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_debut
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 70e7f305-2968-4f03-9dd3-ef2ba0f090f3
+		sourceLineageTag: date_debut
+		summarizeBy: none
+		sourceColumn: date_debut
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_fin
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6d06fab2-95d4-48c2-b805-72157d9c52e1
+		sourceLineageTag: date_fin
+		summarizeBy: none
+		sourceColumn: date_fin
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bfa48be6-bc40-491b-8410-16715d1005fe
+		sourceLineageTag: is_active
+		summarizeBy: none
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 5fb8a845-4b95-4599-a6ac-dadacb7b4d90
+		sourceLineageTag: duration_days
+		summarizeBy: sum
+		sourceColumn: duration_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_remaining
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d982680-6cef-4233-8b3c-9997b6f0927a
+		sourceLineageTag: days_remaining
+		summarizeBy: sum
+		sourceColumn: days_remaining
+
+		annotation SummarizationSetBy = Automatic
+
+	column as_of_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 70057a6b-3b83-4432-92b7-1d977afba94f
+		sourceLineageTag: as_of_date
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b74ee258-be58-4fb4-a956-8daf299c81ec
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: b494344f-173c-415e-85e3-f75e46af392f
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_important_info = entity
+		mode: directLake
+		source
+			entityName: gold_fact_important_info
+			expressionSource: 'DirectLake - lh_health_analytics'
+

@@ -1,0 +1,357 @@
+table gold_dim_drug
+	lineageTag: 526cd3d2-9b54-4cf7-bd86-d0c601071418
+	sourceLineageTag: [dbo].[gold_dim_drug]
+
+	column cis_code
+		dataType: string
+		lineageTag: e979b4ea-d046-48c3-9e39-d160b6400fb7
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column denomination
+		dataType: string
+		lineageTag: 66d5a022-061f-4b57-9b93-8ba994160f17
+		sourceLineageTag: denomination
+		summarizeBy: none
+		sourceColumn: denomination
+
+		annotation SummarizationSetBy = Automatic
+
+	column forme_pharmaceutique
+		dataType: string
+		lineageTag: 1f6ae3ba-24dc-4772-adc2-feba2e22a419
+		sourceLineageTag: forme_pharmaceutique
+		summarizeBy: none
+		sourceColumn: forme_pharmaceutique
+
+		annotation SummarizationSetBy = Automatic
+
+	column voie_administration
+		dataType: string
+		lineageTag: fe37e723-504b-4f8a-be77-02f76eb3bb60
+		sourceLineageTag: voie_administration
+		summarizeBy: none
+		sourceColumn: voie_administration
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_voies
+		dataType: int64
+		formatString: 0
+		lineageTag: a3f5d88c-4c82-42d9-9d30-abfc41889a4e
+		sourceLineageTag: nombre_voies
+		summarizeBy: sum
+		sourceColumn: nombre_voies
+
+		annotation SummarizationSetBy = Automatic
+
+	column statut_amm
+		dataType: string
+		lineageTag: 5caf9b6d-dd65-4c58-ad5c-71fb6a2e0d89
+		sourceLineageTag: statut_amm
+		summarizeBy: none
+		sourceColumn: statut_amm
+
+		annotation SummarizationSetBy = Automatic
+
+	column type_procedure_amm
+		dataType: string
+		lineageTag: 6b0eb064-f17c-490e-abc1-d1757824dc04
+		sourceLineageTag: type_procedure_amm
+		summarizeBy: none
+		sourceColumn: type_procedure_amm
+
+		annotation SummarizationSetBy = Automatic
+
+	column etat_commercialisation
+		dataType: string
+		lineageTag: 9a28ae04-3cdf-4de7-bbe4-3e2340bf0c0c
+		sourceLineageTag: etat_commercialisation
+		summarizeBy: none
+		sourceColumn: etat_commercialisation
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_commercialisee
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 46f80070-6070-4c36-bc69-67dcdad39b02
+		sourceLineageTag: is_commercialisee
+		summarizeBy: none
+		sourceColumn: is_commercialisee
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_amm
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 326a0646-5749-4ee0-aa5b-25ce21872962
+		sourceLineageTag: date_amm
+		summarizeBy: none
+		sourceColumn: date_amm
+
+		annotation SummarizationSetBy = Automatic
+
+	column titulaire
+		dataType: string
+		lineageTag: 53626295-2b74-42b4-9121-f3bd8ebee250
+		sourceLineageTag: titulaire
+		summarizeBy: none
+		sourceColumn: titulaire
+
+		annotation SummarizationSetBy = Automatic
+
+	column surveillance_renforcee
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2294205f-45b8-44d3-b2ff-823c5aa6077c
+		sourceLineageTag: surveillance_renforcee
+		summarizeBy: none
+		sourceColumn: surveillance_renforcee
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_inferred
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 43672c65-fd9e-4c15-9e67-005a25e9a40f
+		sourceLineageTag: is_inferred
+		summarizeBy: none
+		sourceColumn: is_inferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column substance_active_primary
+		dataType: string
+		lineageTag: 5c5a4fc5-645a-44f9-afad-3bc220912ffb
+		sourceLineageTag: substance_active_primary
+		summarizeBy: none
+		sourceColumn: substance_active_primary
+
+		annotation SummarizationSetBy = Automatic
+
+	column dosage_primary
+		dataType: string
+		lineageTag: 8e0db903-cdaa-490c-8632-1b1df1fa8b36
+		sourceLineageTag: dosage_primary
+		summarizeBy: none
+		sourceColumn: dosage_primary
+
+		annotation SummarizationSetBy = Automatic
+
+	column dosage_unit_primary
+		dataType: string
+		lineageTag: 7b1283f6-367a-4c49-8054-ab3ebf5d23eb
+		sourceLineageTag: dosage_unit_primary
+		summarizeBy: none
+		sourceColumn: dosage_unit_primary
+
+		annotation SummarizationSetBy = Automatic
+
+	column substance_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cb75143-2c2d-4965-837e-1ac9ead8101a
+		sourceLineageTag: substance_count
+		summarizeBy: sum
+		sourceColumn: substance_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column generic_group_id
+		dataType: string
+		lineageTag: d92f9898-a264-41ba-950d-f50d1be5d8ac
+		sourceLineageTag: generic_group_id
+		summarizeBy: none
+		sourceColumn: generic_group_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column type_generique_label
+		dataType: string
+		lineageTag: 9aa5502d-37b4-4456-9d18-bcf475bffd0b
+		sourceLineageTag: type_generique_label
+		summarizeBy: none
+		sourceColumn: type_generique_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_generic
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a785eb8e-9845-49fd-a77e-1811bac6a043
+		sourceLineageTag: is_generic
+		summarizeBy: none
+		sourceColumn: is_generic
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_princeps
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 05fddd58-4b1f-4f26-859f-4f8d1c3ac82b
+		sourceLineageTag: is_princeps
+		summarizeBy: none
+		sourceColumn: is_princeps
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_prescription_required
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fcac6d50-d0cf-47c5-961d-3b3fda2aa889
+		sourceLineageTag: is_prescription_required
+		summarizeBy: none
+		sourceColumn: is_prescription_required
+
+		annotation SummarizationSetBy = Automatic
+
+	column smr_latest
+		dataType: string
+		lineageTag: b4e326c9-4b6d-4752-a48a-b7889b71259a
+		sourceLineageTag: smr_latest
+		summarizeBy: none
+		sourceColumn: smr_latest
+
+		annotation SummarizationSetBy = Automatic
+
+	column smr_rank_latest
+		dataType: int64
+		formatString: 0
+		lineageTag: 8876f004-a1d6-4c1d-8ec9-471181c9c24e
+		sourceLineageTag: smr_rank_latest
+		summarizeBy: sum
+		sourceColumn: smr_rank_latest
+
+		annotation SummarizationSetBy = Automatic
+
+	column asmr_latest
+		dataType: string
+		lineageTag: 165884cb-325b-48d3-8be4-4af09e1c2572
+		sourceLineageTag: asmr_latest
+		summarizeBy: none
+		sourceColumn: asmr_latest
+
+		annotation SummarizationSetBy = Automatic
+
+	column asmr_rank_latest
+		dataType: int64
+		formatString: 0
+		lineageTag: cc0b887c-6caa-4868-b803-14f7270ebe5a
+		sourceLineageTag: asmr_rank_latest
+		summarizeBy: sum
+		sourceColumn: asmr_rank_latest
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_atc
+		dataType: string
+		lineageTag: a599ea44-02f1-46b2-b616-87c79f9f2fc8
+		sourceLineageTag: code_atc
+		summarizeBy: none
+		sourceColumn: code_atc
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level1
+		dataType: string
+		lineageTag: 0edf98c6-6b08-46cf-ba9c-e61dfcacd0f0
+		sourceLineageTag: atc_level1
+		summarizeBy: none
+		sourceColumn: atc_level1
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level2
+		dataType: string
+		lineageTag: 4e943074-442b-4ff3-b3b2-8bc087fe8cd8
+		sourceLineageTag: atc_level2
+		summarizeBy: none
+		sourceColumn: atc_level2
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_mitm
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 51363778-2faa-417f-8f61-cf94ffa3b184
+		sourceLineageTag: is_mitm
+		summarizeBy: none
+		sourceColumn: is_mitm
+
+		annotation SummarizationSetBy = Automatic
+
+	column voies_administration
+		dataType: string
+		lineageTag: d6ac4a11-e586-49b1-8c5d-9b304da59390
+		sourceLineageTag: voies_administration
+		summarizeBy: none
+		sourceColumn: voies_administration
+
+		annotation SummarizationSetBy = Automatic
+
+	column substances_list
+		dataType: string
+		lineageTag: fc8450aa-1add-4d1e-b1b7-d78e2601e19e
+		sourceLineageTag: substances_list
+		summarizeBy: none
+		sourceColumn: substances_list
+
+		annotation SummarizationSetBy = Automatic
+
+	column prescription_categories_list
+		dataType: string
+		lineageTag: 2e4331b4-3819-4819-a345-c3c213a0c8a3
+		sourceLineageTag: prescription_categories_list
+		summarizeBy: none
+		sourceColumn: prescription_categories_list
+
+		annotation SummarizationSetBy = Automatic
+
+	column atc_level1_label
+		dataType: string
+		lineageTag: a5adf8f7-a980-42ed-8f87-3b29d0870ebb
+		sourceLineageTag: atc_level1_label
+		summarizeBy: none
+		sourceColumn: atc_level1_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: cc3af1bd-0d77-49c4-bc3e-b52eeaf2b234
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5a20ce16-51bc-424a-a472-3fc1cf23baf4
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 92f8f9b1-cc7e-417c-b38b-822c49589049
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_drug = entity
+		mode: directLake
+		source
+			entityName: gold_dim_drug
+			expressionSource: 'DirectLake - lh_health_analytics'
+

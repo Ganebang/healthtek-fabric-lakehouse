@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_master_health_pipeline",
+    "description": "HealthTek – pipeline maître (architecture notebook-centric 100% native Fabric)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "51e8c99f-69bb-9ba2-4d92-483d1a10f8bd"
+  }
+}

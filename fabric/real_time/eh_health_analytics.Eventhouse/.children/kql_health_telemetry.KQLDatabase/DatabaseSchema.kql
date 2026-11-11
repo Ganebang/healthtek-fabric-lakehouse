@@ -1,0 +1,8 @@
+// KQL script
+// Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
+
+
+.create-merge table pharmacy_shortage_events (event_time:datetime, hospital_id:string, region:string, cis_code:string, cip13:string, stock_level:int, alert_severity:string) 
+.alter table pharmacy_shortage_events policy retention @'{"SoftDeletePeriod":"365.00:00:00","Recoverability":"Enabled"}'
+.alter table pharmacy_shortage_events policy caching hotdata = time(30.00:00:00) hotindex = time(30.00:00:00)
+.alter table pharmacy_shortage_events policy ingestionbatching @'{"MaximumBatchingTimeSpan":"00:00:10","MaximumNumberOfItems":500,"MaximumRawDataSizeMB":100,"Origin":0}'

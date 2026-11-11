@@ -1,0 +1,86 @@
+relationship 3fa696e6-0713-5a21-a712-3e0cab751035
+	fromColumn: gold_fact_presentation_price.drug_sk
+	toColumn: gold_dim_drug.drug_sk
+
+relationship 0c32d835-b4a3-5df5-9fe5-9a24925c9f11
+	fromColumn: gold_fact_presentation_price.presentation_sk
+	toColumn: gold_dim_presentation.presentation_sk
+
+relationship db6dcc84-6052-53b9-8881-02b0aae6bd72
+	fromColumn: gold_fact_presentation_price.time_sk
+	toColumn: gold_dim_time.time_sk
+
+relationship 9c10416d-abf5-5db1-b5bd-0011bb760a9a
+	fromColumn: gold_fact_shortage.drug_sk
+	toColumn: gold_dim_drug.drug_sk
+
+relationship 425bbf1a-b72a-5df0-915f-54da94f2fe58
+	fromColumn: gold_fact_shortage.presentation_sk
+	toColumn: gold_dim_presentation.presentation_sk
+
+relationship d3f90f99-5dce-5626-a213-e8c331beb2ae
+	fromColumn: gold_fact_shortage.status_sk
+	toColumn: gold_dim_status.status_sk
+
+relationship 1e4cb2e3-d30a-5e0f-bdf5-8190c56a3ef2
+	fromColumn: gold_fact_shortage.time_sk
+	toColumn: gold_dim_time.time_sk
+
+relationship dc95165e-523a-5e30-bfa1-b3784e2afbc7
+	isActive: false
+	fromColumn: gold_fact_shortage.time_end_sk
+	toColumn: gold_dim_time.time_sk
+
+relationship a2be44fb-9d88-54a9-85bf-0985b07754a4
+	fromColumn: gold_fact_has_opinion.drug_sk
+	toColumn: gold_dim_drug.drug_sk
+
+relationship f866374c-de46-5eef-8ab7-89f840dab428
+	fromColumn: gold_fact_has_opinion.level_sk
+	toColumn: gold_dim_opinion_level.level_sk
+
+relationship 207f645a-64b6-509c-b12d-b42876bc5ff7
+	fromColumn: gold_fact_has_opinion.time_sk
+	toColumn: gold_dim_time.time_sk
+
+relationship a55d55fa-5e33-5186-bfcb-a86a4653decb
+	fromColumn: gold_fact_important_info.drug_sk
+	toColumn: gold_dim_drug.drug_sk
+
+relationship 36064f40-2da5-5675-ac8d-3f8989773c1a
+	fromColumn: gold_fact_important_info.time_sk
+	toColumn: gold_dim_time.time_sk
+
+relationship d4f246fe-7bb8-58b9-beeb-26562a378d76
+	isActive: false
+	fromColumn: gold_fact_important_info.time_end_sk
+	toColumn: gold_dim_time.time_sk
+
+relationship 5b3a26cd-fc24-5082-b741-b247362cee80
+	fromColumn: gold_fact_composition.drug_sk
+	toColumn: gold_dim_drug.drug_sk
+
+relationship d5c1d607-d11e-5662-9639-57f92e5dca0c
+	fromColumn: gold_fact_composition.substance_sk
+	toColumn: gold_dim_substance.substance_sk
+
+relationship bbbb50d2-0104-581f-b0f7-1bc53948b6c2
+	fromColumn: gold_dim_drug.generic_group_id
+	toColumn: gold_dim_generic_group.generic_group_id
+
+relationship ff6ce251-9d50-577c-a993-8e0d81dc5945
+	fromColumn: gold_dim_drug.code_atc
+	toColumn: gold_dim_atc.code_atc
+
+relationship b6173b4e-df0c-5052-8d77-b43556387355
+	fromColumn: gold_kpi_shortage_risk_score.drug_sk
+	toColumn: gold_dim_drug.drug_sk
+
+relationship ea091863-9d5a-5ffe-9fcc-a742aa607922
+	fromColumn: gold_kpi_generic_price_gap.group_sk
+	toColumn: gold_dim_generic_group.group_sk
+
+relationship f27209dc-0b25-52b7-aaa2-40103ddcdc05
+	fromColumn: gold_kpi_price_movement.cip13
+	toColumn: gold_dim_presentation.cip13
+

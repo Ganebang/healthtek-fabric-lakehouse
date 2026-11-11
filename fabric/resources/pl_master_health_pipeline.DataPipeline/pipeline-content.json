@@ -1,0 +1,1170 @@
+{
+  "properties": {
+    "description": "HealthTek — pipeline maître BDPM : verrou → landing → Bronze → DQ → Silver → DQ → Gold → DQ → Warehouse → reframe Power BI → maintenance → libération du verrou (toujours).",
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "69ca8e06-eecd-b06b-41ac-1201d7bd02d1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "lock",
+              "type": "string"
+            },
+            "action": {
+              "value": "acquire",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_lock",
+        "description": "Acquiert le verrou coopératif _ops_run_lock (TTL 180 min) pour interdire deux exécutions concurrentes.",
+        "dependsOn": []
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_lock",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape lock (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_lock",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape lock en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_lock')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_LOCK"
+        },
+        "name": "fail_lock",
+        "dependsOn": [
+          {
+            "activity": "alert_lock",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "4b485455-66b5-80c9-4762-1b3b7c55c512",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "setup",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:15:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_setup_folders",
+        "description": "Crée de façon idempotente les 11 sous-dossiers Files/landing/bdpm/*.",
+        "dependsOn": [
+          {
+            "activity": "run_lock",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_setup",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape setup (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_setup_folders",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape setup en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_setup_folders')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_SETUP"
+        },
+        "name": "fail_setup",
+        "dependsOn": [
+          {
+            "activity": "alert_setup",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "958156cc-8492-8e45-47c0-14cfe2e552b3",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "ingest_bdpm",
+              "type": "string"
+            },
+            "fail_fast": {
+              "value": {
+                "value": "@string(pipeline().parameters.p_fail_fast)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "source_filter": {
+              "value": {
+                "value": "@pipeline().parameters.p_source_filter",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:30:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 120,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_ingest_bdpm",
+        "description": "Télécharge les fichiers BDPM éligibles (cadence) vers Files/landing avec manifeste et contrôle d'intégrité.",
+        "dependsOn": [
+          {
+            "activity": "run_setup_folders",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_ingest_bdpm",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape ingest_bdpm (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_ingest_bdpm",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape ingest_bdpm en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_ingest_bdpm')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_INGEST_BDPM"
+        },
+        "name": "fail_ingest_bdpm",
+        "dependsOn": [
+          {
+            "activity": "alert_ingest_bdpm",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "eb4153c0-cdf6-91a0-49e8-48bb38906419",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "bronze",
+              "type": "string"
+            },
+            "source_filter": {
+              "value": {
+                "value": "@pipeline().parameters.p_source_filter",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_bronze",
+        "description": "Charge le dernier dépôt landing de chaque source en tables Delta Bronze (texte brut + colonnes d'audit).",
+        "dependsOn": [
+          {
+            "activity": "run_ingest_bdpm",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_bronze",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape bronze (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_bronze",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape bronze en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_bronze')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_BRONZE"
+        },
+        "name": "fail_bronze",
+        "dependsOn": [
+          {
+            "activity": "alert_bronze",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "ac595f26-a895-947d-41b0-f2f36c40a9e8",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "dq_bronze",
+              "type": "string"
+            },
+            "fail_fast": {
+              "value": {
+                "value": "@string(pipeline().parameters.p_fail_fast)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "layer": {
+              "value": "bronze",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_dq_bronze",
+        "description": "Porte qualité Bronze : bloque le pipeline si une règle critique échoue (p_fail_fast).",
+        "dependsOn": [
+          {
+            "activity": "run_bronze",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_dq_bronze",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape dq_bronze (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_dq_bronze",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape dq_bronze en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_dq_bronze')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_DQ_BRONZE"
+        },
+        "name": "fail_dq_bronze",
+        "dependsOn": [
+          {
+            "activity": "alert_dq_bronze",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "0d8a8130-ff6c-aa2c-4405-0275987a9fa2",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "silver",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_silver",
+        "description": "Nettoie, type et dédoublonne les 11 sources ; rejets routés vers _dq_quarantine.",
+        "dependsOn": [
+          {
+            "activity": "run_dq_bronze",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_silver",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape silver (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_silver",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape silver en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_silver')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_SILVER"
+        },
+        "name": "fail_silver",
+        "dependsOn": [
+          {
+            "activity": "alert_silver",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "ac595f26-a895-947d-41b0-f2f36c40a9e8",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "dq_silver",
+              "type": "string"
+            },
+            "fail_fast": {
+              "value": {
+                "value": "@string(pipeline().parameters.p_fail_fast)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "layer": {
+              "value": "silver",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_dq_silver",
+        "description": "Porte qualité Silver.",
+        "dependsOn": [
+          {
+            "activity": "run_silver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_dq_silver",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape dq_silver (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_dq_silver",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape dq_silver en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_dq_silver')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_DQ_SILVER"
+        },
+        "name": "fail_dq_silver",
+        "dependsOn": [
+          {
+            "activity": "alert_dq_silver",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "03c69b94-78b4-8805-4f53-be48c0fe85c4",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "gold",
+              "type": "string"
+            },
+            "mode": {
+              "value": {
+                "value": "@pipeline().parameters.p_gold_mode",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_gold",
+        "description": "Construit la galaxie Gold : 8 dimensions, 5 faits, 4 tables KPI (Direct Lake).",
+        "dependsOn": [
+          {
+            "activity": "run_dq_silver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_gold",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape gold (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_gold",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape gold en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_gold')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_GOLD"
+        },
+        "name": "fail_gold",
+        "dependsOn": [
+          {
+            "activity": "alert_gold",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "ac595f26-a895-947d-41b0-f2f36c40a9e8",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "dq_gold",
+              "type": "string"
+            },
+            "fail_fast": {
+              "value": {
+                "value": "@string(pipeline().parameters.p_fail_fast)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "layer": {
+              "value": "gold",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_dq_gold",
+        "description": "Porte qualité Gold (intégrité référentielle, unicité des clés, fraîcheur).",
+        "dependsOn": [
+          {
+            "activity": "run_gold",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_dq_gold",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape dq_gold (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_dq_gold",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape dq_gold en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_dq_gold')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_DQ_GOLD"
+        },
+        "name": "fail_dq_gold",
+        "dependsOn": [
+          {
+            "activity": "alert_dq_gold",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@not(pipeline().parameters.p_skip_warehouse)",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "bf6d67fc-74f8-b296-4bf2-659733d1c615",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "run_id": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "run_date": {
+                    "value": {
+                      "value": "@pipeline().parameters.p_run_date",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "stage": {
+                    "value": "warehouse",
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.01:00:00",
+                "retry": 1,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "run_warehouse",
+              "dependsOn": []
+            }
+          ],
+          "ifFalseActivities": []
+        },
+        "name": "if_warehouse",
+        "description": "Synchronise les tables Gold vers le Warehouse T-SQL sauf si p_skip_warehouse = true.",
+        "dependsOn": [
+          {
+            "activity": "run_dq_gold",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_warehouse",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape warehouse (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "if_warehouse",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape warehouse en échec (run ', pipeline().RunId, ') : ', coalesce(activity('if_warehouse')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_WAREHOUSE"
+        },
+        "name": "fail_warehouse",
+        "dependsOn": [
+          {
+            "activity": "alert_warehouse",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "227eef9a-9d05-aecc-473f-4228791097ba",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "refresh",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_refresh_model",
+        "description": "Recadre (reframe) le modèle Direct Lake sem_health_analytics après la porte qualité Gold et la synchro Warehouse : le rapport n'affiche que des données validées.",
+        "dependsOn": [
+          {
+            "activity": "if_warehouse",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_refresh",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape refresh (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_refresh_model",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape refresh en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_refresh_model')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_REFRESH"
+        },
+        "name": "fail_refresh",
+        "dependsOn": [
+          {
+            "activity": "alert_refresh",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@or(pipeline().parameters.p_run_maintenance, equals(dayOfWeek(utcNow()), 0))",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "c5e00a07-15f3-be95-43f4-b78eb21a26be",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "run_id": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "run_date": {
+                    "value": {
+                      "value": "@pipeline().parameters.p_run_date",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "stage": {
+                    "value": "maintenance",
+                    "type": "string"
+                  },
+                  "retain_hours": {
+                    "value": {
+                      "value": "@pipeline().parameters.p_vacuum_retain_hours",
+                      "type": "Expression"
+                    },
+                    "type": "int"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.01:00:00",
+                "retry": 1,
+                "retryIntervalInSeconds": 60,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "run_maintenance",
+              "description": "OPTIMIZE + VACUUM des tables Gold.",
+              "dependsOn": []
+            }
+          ],
+          "ifFalseActivities": []
+        },
+        "name": "if_maintenance",
+        "description": "Maintenance Delta (OPTIMIZE Z-ORDER + VACUUM) le dimanche ou sur demande (p_run_maintenance).",
+        "dependsOn": [
+          {
+            "activity": "run_refresh_model",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_maintenance",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape maintenance (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "if_maintenance",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape maintenance en échec (run ', pipeline().RunId, ') : ', coalesce(activity('if_maintenance')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_MAINTENANCE"
+        },
+        "name": "fail_maintenance",
+        "dependsOn": [
+          {
+            "activity": "alert_maintenance",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "69ca8e06-eecd-b06b-41ac-1201d7bd02d1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "run_date": {
+              "value": {
+                "value": "@pipeline().parameters.p_run_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "stage": {
+              "value": "unlock",
+              "type": "string"
+            },
+            "action": {
+              "value": "release",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:15:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_unlock",
+        "description": "Libère TOUJOURS le verrou du run courant (succès, échec ou étapes ignorées) pour éviter un blocage jusqu'à expiration du TTL.",
+        "dependsOn": [
+          {
+            "activity": "if_maintenance",
+            "dependencyConditions": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 1
+        },
+        "name": "alert_unlock",
+        "description": "Point d'extension notification (Outlook/Teams) — HealthTek : échec de l'étape unlock (run @{pipeline().RunId})",
+        "dependsOn": [
+          {
+            "activity": "run_unlock",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat('HealthTek — étape unlock en échec (run ', pipeline().RunId, ') : ', coalesce(activity('run_unlock')?.error?.message, 'voir la sortie du notebook'))",
+            "type": "Expression"
+          },
+          "errorCode": "HT_UNLOCK"
+        },
+        "name": "fail_unlock",
+        "dependsOn": [
+          {
+            "activity": "alert_unlock",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "p_source_filter": {
+        "type": "String",
+        "defaultValue": "auto"
+      },
+      "p_fail_fast": {
+        "type": "Bool",
+        "defaultValue": true
+      },
+      "p_skip_warehouse": {
+        "type": "Bool",
+        "defaultValue": false
+      },
+      "p_run_date": {
+        "type": "String",
+        "defaultValue": ""
+      },
+      "p_gold_mode": {
+        "type": "String",
+        "defaultValue": "incremental"
+      },
+      "p_run_maintenance": {
+        "type": "Bool",
+        "defaultValue": false
+      },
+      "p_vacuum_retain_hours": {
+        "type": "Int",
+        "defaultValue": 168
+      }
+    },
+    "concurrency": 1,
+    "annotations": [
+      "HealthTek",
+      "BDPM",
+      "medallion"
+    ]
+  }
+}

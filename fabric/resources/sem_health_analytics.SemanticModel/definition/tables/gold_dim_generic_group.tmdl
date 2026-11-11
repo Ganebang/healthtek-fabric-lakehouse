@@ -1,0 +1,115 @@
+table gold_dim_generic_group
+	lineageTag: 6101fefe-620a-4b61-85de-1531d270011a
+	sourceLineageTag: [dbo].[gold_dim_generic_group]
+
+	column generic_group_id
+		dataType: string
+		lineageTag: 93cfdc4f-e74c-4380-a1ca-555ddbec78c4
+		sourceLineageTag: generic_group_id
+		summarizeBy: none
+		sourceColumn: generic_group_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column libelle_groupe
+		dataType: string
+		lineageTag: d9624ec5-6946-4a61-be92-a857be97b6af
+		sourceLineageTag: libelle_groupe
+		summarizeBy: none
+		sourceColumn: libelle_groupe
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_members
+		dataType: int64
+		formatString: 0
+		lineageTag: 46f43515-e812-4f1a-9a9a-91f67ea747a7
+		sourceLineageTag: total_members
+		summarizeBy: sum
+		sourceColumn: total_members
+
+		annotation SummarizationSetBy = Automatic
+
+	column generic_count
+		dataType: int64
+		formatString: 0
+		lineageTag: cfa9974f-4529-4fb5-afad-dcc037c0afc1
+		sourceLineageTag: generic_count
+		summarizeBy: sum
+		sourceColumn: generic_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column princeps_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 403f6537-5c13-4314-98fc-f75cbffde7c7
+		sourceLineageTag: princeps_count
+		summarizeBy: sum
+		sourceColumn: princeps_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column princeps_cis_code
+		dataType: string
+		lineageTag: 15cfd735-d7e9-4b07-8038-e5cf172c0cb0
+		sourceLineageTag: princeps_cis_code
+		summarizeBy: none
+		sourceColumn: princeps_cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column princeps_denomination
+		dataType: string
+		lineageTag: d70a21a6-e8a9-482d-bfef-3023161bf038
+		sourceLineageTag: princeps_denomination
+		summarizeBy: none
+		sourceColumn: princeps_denomination
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_generics
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: deb3df92-5854-449e-ac4e-46a8792d4ea0
+		sourceLineageTag: has_generics
+		summarizeBy: none
+		sourceColumn: has_generics
+
+		annotation SummarizationSetBy = Automatic
+
+	column group_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 11051a3b-acff-4a6e-b539-8c762d969d1d
+		sourceLineageTag: group_sk
+		summarizeBy: sum
+		sourceColumn: group_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8e5801a5-d222-44d6-9edf-3b42d2be73ed
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: eb4b8208-0e85-407c-ae3a-20d648830027
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_generic_group = entity
+		mode: directLake
+		source
+			entityName: gold_dim_generic_group
+			expressionSource: 'DirectLake - lh_health_analytics'
+

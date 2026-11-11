@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDatabase",
+    "displayName": "eh_health_analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ab2ef96b-50d5-97d5-48ca-d3fb1313fff5"
+  }
+}

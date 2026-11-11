@@ -1,0 +1,142 @@
+table gold_fact_composition
+	lineageTag: 8b9e2c7d-b213-43b7-b3fa-5eb64f0b3200
+	sourceLineageTag: [dbo].[gold_fact_composition]
+
+	column composition_key
+		dataType: string
+		lineageTag: b4bf0988-5a86-4098-881e-08b938064937
+		sourceLineageTag: composition_key
+		summarizeBy: none
+		sourceColumn: composition_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column drug_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: e425c9e2-982b-40df-af28-b2827f26b35f
+		sourceLineageTag: drug_sk
+		summarizeBy: sum
+		sourceColumn: drug_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column substance_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 27402e90-cb9e-47c3-91d3-36b903e677cb
+		sourceLineageTag: substance_sk
+		summarizeBy: sum
+		sourceColumn: substance_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_code
+		dataType: string
+		lineageTag: 596e7146-8996-4a21-944c-4f4633e92db7
+		sourceLineageTag: cis_code
+		summarizeBy: none
+		sourceColumn: cis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column designation_element
+		dataType: string
+		lineageTag: b9346952-0d11-4d27-bb14-e19df50bad7c
+		sourceLineageTag: designation_element
+		summarizeBy: none
+		sourceColumn: designation_element
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_substance
+		dataType: string
+		lineageTag: 57f53d07-5a97-4fc4-8aa2-96686c072971
+		sourceLineageTag: code_substance
+		summarizeBy: none
+		sourceColumn: code_substance
+
+		annotation SummarizationSetBy = Automatic
+
+	column nature_composant
+		dataType: string
+		lineageTag: 453e8ff1-1a5a-46ad-92e0-45eb3fd81fa0
+		sourceLineageTag: nature_composant
+		summarizeBy: none
+		sourceColumn: nature_composant
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active_substance
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 776f560f-ab6b-4c39-bb06-a9031280e5e2
+		sourceLineageTag: is_active_substance
+		summarizeBy: none
+		sourceColumn: is_active_substance
+
+		annotation SummarizationSetBy = Automatic
+
+	column dosage_numeric
+		dataType: double
+		lineageTag: 7bf9bd41-09ee-443d-a936-9f792a4fca2e
+		sourceLineageTag: dosage_numeric
+		summarizeBy: sum
+		sourceColumn: dosage_numeric
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column dosage_unit
+		dataType: string
+		lineageTag: 8ec40c91-e578-40df-8025-95a6a8ca6215
+		sourceLineageTag: dosage_unit
+		summarizeBy: none
+		sourceColumn: dosage_unit
+
+		annotation SummarizationSetBy = Automatic
+
+	column reference_dosage
+		dataType: string
+		lineageTag: 919cfda9-d7af-487f-8eba-25318713deba
+		sourceLineageTag: reference_dosage
+		summarizeBy: none
+		sourceColumn: reference_dosage
+
+		annotation SummarizationSetBy = Automatic
+
+	column numero_liaison_sa_ft
+		dataType: string
+		lineageTag: 08b27615-2d06-46eb-9f5f-e0bddb26409c
+		sourceLineageTag: numero_liaison_sa_ft
+		summarizeBy: none
+		sourceColumn: numero_liaison_sa_ft
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 22e6241b-d2d0-4827-9bcf-e52cf8a733df
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: 90321988-e5fc-4de6-af83-ae14587d674a
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_composition = entity
+		mode: directLake
+		source
+			entityName: gold_fact_composition
+			expressionSource: 'DirectLake - lh_health_analytics'
+

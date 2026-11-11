@@ -1,0 +1,147 @@
+{
+  "schema_version": 89,
+  "flavor": "RTDashboard_Regular",
+  "changeDetection": {
+    "kind": "liveUpdates",
+    "minRefreshRate": "30s",
+    "fallbackRefreshRate": "1m",
+    "minRefreshRate_V2": "30s"
+  },
+  "tiles": [
+    {
+      "id": "36075b60-cb1c-486d-8d6b-4dfdeb1a243c",
+      "title": "Alertes ruptures hospitalières (15 min)",
+      "visualType": "timechart",
+      "pageId": "42156b0d-91f3-496f-8d25-dae079b0ae9c",
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 9,
+        "height": 7
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "5130ce40-9d09-4d4d-91b0-687692126bc7"
+      },
+      "visualOptions": {
+        "xColumn": null,
+        "multipleYAxes": {
+          "additional": [],
+          "showMultiplePanels": false,
+          "base": {
+            "horizontalLines": [],
+            "yAxisScale": "linear",
+            "yAxisMaximumValue": null,
+            "yAxisMinimumValue": null,
+            "columns": [],
+            "label": "",
+            "id": "-1"
+          }
+        },
+        "yColumns": null,
+        "seriesColumns": null,
+        "anomalyColumns": null,
+        "map__longitudeColumn": null,
+        "map__latitudeColumn": null,
+        "seriesColors": {},
+        "hideLegend": false,
+        "legendLocation": "bottom",
+        "xColumnTitle": "",
+        "xAxisScale": "linear",
+        "verticalLine": "",
+        "crossFilter": [],
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "forceAxisTicks": false,
+        "drillthrough": [],
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 10
+        }
+      }
+    },
+    {
+      "id": "ed355707-4cf5-40d4-a138-dea24cabca0a",
+      "title": "Alertes CRITICAL enrichies BDPM (Shortcut)",
+      "visualType": "table",
+      "pageId": "42156b0d-91f3-496f-8d25-dae079b0ae9c",
+      "layout": {
+        "x": 9,
+        "y": 0,
+        "width": 9,
+        "height": 7
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "e1c6ab81-4f90-4141-95f1-591ee4416948"
+      },
+      "visualOptions": {
+        "table__enableRenderLinks": true,
+        "colorRulesDisabled": true,
+        "crossFilter": [],
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "drillthrough": [],
+        "table__renderLinks": [],
+        "colorRules": []
+      }
+    }
+  ],
+  "baseQueries": [],
+  "parameters": [
+    {
+      "kind": "duration",
+      "id": "62bfbfc6-fded-4564-b0e2-4adcf60c2257",
+      "displayName": "Time range",
+      "description": "",
+      "beginVariableName": "_startTime",
+      "endVariableName": "_endTime",
+      "defaultValue": {
+        "kind": "dynamic",
+        "count": 1,
+        "unit": "hours"
+      },
+      "showOnPages": {
+        "kind": "all"
+      }
+    }
+  ],
+  "dataSources": [
+    {
+      "id": "488efc35-24ad-4b8d-972b-4a86c104a9c6",
+      "kind": "kusto-trident",
+      "name": "kql_health_telemetry",
+      "clusterUri": "",
+      "databaseArtifactId": "173bd3c8-97f4-4b4f-b494-ccf19c7ab641",
+      "database": "9c7ab641-ccf1-b494-4b4f-97f4173bd3c8",
+      "workspace": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "pages": [
+    {
+      "name": "Page 1",
+      "id": "42156b0d-91f3-496f-8d25-dae079b0ae9c"
+    }
+  ],
+  "queries": [
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "488efc35-24ad-4b8d-972b-4a86c104a9c6"
+      },
+      "text": "// === BLOC 3B : Serie temporelle continue (make-series) + Graphique ===\npharmacy_shortage_events\n| make-series total_events = count() default = 0\n    on event_time from datetime(2026-11-10T02:00:00Z) to datetime(2026-11-10T04:00:00Z) step 15m\n    by alert_severity\n| render timechart\n\n",
+      "id": "5130ce40-9d09-4d4d-91b0-687692126bc7",
+      "usedVariables": []
+    },
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "488efc35-24ad-4b8d-972b-4a86c104a9c6"
+      },
+      "text": "pharmacy_shortage_events\r\n| where alert_severity == \"CRITICAL\"\r\n| join kind=leftouter (\r\n    gold_dim_drug | project cis_code, denomination, is_mitm, substance_active_primary\r\n) on cis_code\r\n| project event_time, hospital_id, region, cis_code, denomination, is_mitm, substance_active_primary, stock_level\r\n| order by event_time desc",
+      "id": "e1c6ab81-4f90-4141-95f1-591ee4416948",
+      "usedVariables": []
+    }
+  ],
+  "embeddedApps": []
+}

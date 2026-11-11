@@ -1,0 +1,117 @@
+table gold_kpi_shortage_monthly
+	lineageTag: 7a37bbac-ef93-4e3c-bcd2-f5d05de476a1
+	sourceLineageTag: [dbo].[gold_kpi_shortage_monthly]
+
+	column year_month
+		dataType: string
+		lineageTag: 77f12c28-97bc-4095-88b9-f38bb2650a95
+		sourceLineageTag: year_month
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: bceb7920-4464-4068-968b-f6ecbddf8fb5
+		sourceLineageTag: year
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: c416ff53-134e-460a-8e46-3c26e87a2736
+		sourceLineageTag: month
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_start
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bacce10f-e5eb-40d7-8dbe-95c4af0703ea
+		sourceLineageTag: month_start
+		summarizeBy: none
+		sourceColumn: month_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_statut
+		dataType: int64
+		formatString: 0
+		lineageTag: cf2dcdb4-6d50-4220-94bc-7701982b0566
+		sourceLineageTag: code_statut
+		summarizeBy: sum
+		sourceColumn: code_statut
+
+		annotation SummarizationSetBy = Automatic
+
+	column classification
+		dataType: string
+		lineageTag: cf1f993a-b2ad-4952-8b8c-0c3b316525fe
+		sourceLineageTag: classification
+		summarizeBy: none
+		sourceColumn: classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column shortages_started
+		dataType: int64
+		formatString: 0
+		lineageTag: dbf6a551-bb42-4904-9b1c-a2da1f68c9f7
+		sourceLineageTag: shortages_started
+		summarizeBy: sum
+		sourceColumn: shortages_started
+
+		annotation SummarizationSetBy = Automatic
+
+	column still_active
+		dataType: int64
+		formatString: 0
+		lineageTag: f87781bd-f03a-4399-9836-f60aa6e635e7
+		sourceLineageTag: still_active
+		summarizeBy: sum
+		sourceColumn: still_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column cis_level_signals
+		dataType: int64
+		formatString: 0
+		lineageTag: 34b727cb-8233-4a43-b5f9-d84a87c322be
+		sourceLineageTag: cis_level_signals
+		summarizeBy: sum
+		sourceColumn: cis_level_signals
+
+		annotation SummarizationSetBy = Automatic
+
+	column _gold_created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fe6ac287-2844-4070-887c-8405ba3e0fe5
+		sourceLineageTag: _gold_created_at
+		summarizeBy: none
+		sourceColumn: _gold_created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _pipeline_run_id
+		dataType: string
+		lineageTag: b01beb47-1e65-4db0-9b39-2e09834175f4
+		sourceLineageTag: _pipeline_run_id
+		summarizeBy: none
+		sourceColumn: _pipeline_run_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_kpi_shortage_monthly = entity
+		mode: directLake
+		source
+			entityName: gold_kpi_shortage_monthly
+			expressionSource: 'DirectLake - lh_health_analytics'
+
